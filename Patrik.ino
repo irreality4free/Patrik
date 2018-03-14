@@ -3,19 +3,22 @@
 #include <Servo.h> 
 #include <SoftwareSerial.h>
 #include <DFPlayer_Mini_Mp3.h>
+#include <EEPROM.h>
 
 
 class Patrik{
 
   public:
   
-  void init(int l5=13, int l4=12, int l3=11, int l2=10, int l1=9, int neck=8 , int head=7, int r1=6, int r2=5, int r3=4, int r4=3, int r5=2,
-            int led=37, int pump = 48, int all= 40, int volume = 30,int sensor = A1);
+  void init1(int l5=13, int l4=12, int l3=11, int l2=10, int l1=9, int neck=8 , int head=7, int r1=6, int r2=5, int r3=4, int r4=3, int r5=2,
+            int led=45, int pump = 48, int all= 40, int volume = 30, int sensor = A1);
+//  void init1(int l5, int l4, int l3, int l2, int l1, int neck , int head, int r1, int r2, int r3, int r4, int r5,
+//  int led, int pump , int all, int volume , int sensor );
             
   void Move(int l5, int l4, int l3, int l2, int l1, int neck , int head, int r1, int r2, int r3, int r4, int r5);
   void Drink();
   void Say(int from, int to);
-  void Scan();
+  void Scan(long period);
   void DetachHands();
   void DetachAll();
   void AttachAll();
@@ -25,10 +28,11 @@ class Patrik{
   void ResetBools();
   void Run();
   void Wag();
+  Patrik();
  
   private:
   SoftwareSerial mySerial;
-  Test(int m): mySerial (44, 46){}
+  Ultrasonic ultrasonic;
 //  Ultrasonic ultrasonic(int tr = 30,  int ec = 31);//trig , echo
 //  SoftwareSerial mySerial(int rx = 44, int tx =46);  // (46 через резистор, на плеере rx)
   int servo_pins[12];
@@ -40,22 +44,30 @@ class Patrik{
   bool dist_bool = false;
   bool sense_bool = false;
   bool time_bool = false;
-
-
+   
+  int sense_val;
+  int sensor;
+  Patrik() : ultrasonic(30, 31);
+//Ultrasonic* = new Ultrasonic(30, 31); 
+//mySerial = new SoftwareSerial(44,46);
 };
 
 
 
 
 
+Patrik::Patrik(void){
+  
+}
 
 
 
 
 
-
-void Patrik::init(int l5, int l4, int l3, int l2, int l1, int neck=8 , int head=7, int r1=6, int r2=5, int r3=4, int r4=3, int r5=2,
-            int led, int pump, int all, int volume,int sensor = A1){
+//void Patrik::init1(int l5, int l4, int l3, int l2, int l1, int neck=8 , int head=7, int r1=6, int r2=5, int r3=4, int r4=3, int r5=2,
+//            int led, int pump, int all, int volume,int sensor = A1){
+void Patrik::init1(int l5, int l4, int l3, int l2, int l1, int neck , int head, int r1, int r2, int r3, int r4, int r5,
+int led, int pump, int all, int volume,int sensor ){
   
   Serial.begin(9600); //открываем последовательное соединение с компом
   randomSeed(analogRead(A6));
@@ -65,7 +77,7 @@ void Patrik::init(int l5, int l4, int l3, int l2, int l1, int neck=8 , int head=
   pinMode(all, OUTPUT);
   digitalWrite(all, LOW);
 
-  mySerial.begin (9600);
+//  mySerial.begin (9600);
   mp3_set_serial (mySerial);//set softwareSerial for DFPlayer-mini mp3 module 
   mp3_set_volume (volume);  //громкость плеера
   mp3_set_EQ (5);
@@ -101,13 +113,13 @@ void Patrik::init(int l5, int l4, int l3, int l2, int l1, int neck=8 , int head=
 }
 
 void Patrik::AttachAll(){
-  for(int i = 0; i <=11; i++{
+  for(int i = 0; i <=11; i++){
   servo[i].attach(servo_pins[i]);  
   }
  }
 
 void Patrik::DetachAll(){
-  for(int i = 0; i <=11; i++{
+  for(int i = 0; i <=11; i++){
   servo[i].attach(servo_pins[i]);  
   }
  }
@@ -130,9 +142,9 @@ void Patrik::ResetBools(){
 }
 
 void Patrik::Scan(long period){
-long current_time = millis()
+long current_time = millis();
 
-do{
+while(1){
   distance = ultrasonic.distanceRead();
   sense_val = analogRead(sensor);
   if ((millis() - current_time)> period){
@@ -171,14 +183,14 @@ void Patrik::Move(int l5, int l4, int l3, int l2, int l1, int neck , int head, i
   for (int i = 0; i<=11; i++){
     servo[i].read();
   }
-  do{
+  while(1){
     for(int i = 0; i<=11; i++){
       
-      if (new_pos[i]<old_pos[i]{
-        servo[i]++;
+      if (new_pos[i]<old_pos[i]){
+        servo_positions[i]++;
       }
-      if (new_pos[i]>old_pos[i]{
-        servo[i]--;
+      if (new_pos[i]>old_pos[i]){
+        servo_positions[i]--;
       }
       
     }
@@ -205,7 +217,7 @@ void Patrik::Move(int l5, int l4, int l3, int l2, int l1, int neck , int head, i
 
 void Patrik::Run(){
   
-  Scan();
+  Scan(30);
   if(dist_bool){
      ResetBools();
      Pour();
@@ -278,11 +290,11 @@ Patrik patrik;
 
 void setup() {
   // put your setup code here, to run once:
-  patrik.init();
+  //patrik.init1();
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  patrik.Run();
+ // patrik.Run();
 }
