@@ -11,7 +11,7 @@ class Patrik{
   public:
   
   void init1(int l5=13, int l4=12, int l3=11, int l2=10, int l1=9, int neck=8 , int head=7, int r1=6, int r2=5, int r3=4, int r4=3, int r5=2,
-            int led=45, int pump = 48, int all= 40, int volume = 30, int sensor = A1);
+            int led=45, int pump = 48, int all= 40, int volume = 30, int sensor = A0);
 //  void init1(int l5, int l4, int l3, int l2, int l1, int neck , int head, int r1, int r2, int r3, int r4, int r5,
 //  int led, int pump , int all, int volume , int sensor );
             
@@ -28,13 +28,14 @@ class Patrik{
   void ResetBools();
   void Run();
   void Wag();
-  Patrik();
+
+  Patrik(int rx = 44,int tx =46, int trig =30,int echo =31):mySerial(rx,tx),ultrasonic(trig,echo){}
+  
  
   private:
   SoftwareSerial mySerial;
   Ultrasonic ultrasonic;
-//  Ultrasonic ultrasonic(int tr = 30,  int ec = 31);//trig , echo
-//  SoftwareSerial mySerial(int rx = 44, int tx =46);  // (46 через резистор, на плеере rx)
+
   int servo_pins[12];
   int servo_positions[12];
   Servo servo[12];
@@ -47,7 +48,7 @@ class Patrik{
    
   int sense_val;
   int sensor;
-  Patrik() : ultrasonic(30, 31);
+//  Patrik() : ultrasonic(30, 31);
 //Ultrasonic* = new Ultrasonic(30, 31); 
 //mySerial = new SoftwareSerial(44,46);
 };
@@ -55,10 +56,11 @@ class Patrik{
 
 
 
-
-Patrik::Patrik(void){
-  
-}
+//
+//Patrik::Patrik(void){
+//  ultrasonic = new Ultrasonic(30,31);
+//  mySerial = new SoftwareSerial(44,46);
+//}
 
 
 
@@ -70,17 +72,20 @@ void Patrik::init1(int l5, int l4, int l3, int l2, int l1, int neck , int head, 
 int led, int pump, int all, int volume,int sensor ){
   
   Serial.begin(9600); //открываем последовательное соединение с компом
+  
   randomSeed(analogRead(A6));
   pinMode(led, OUTPUT);
   pinMode(pump, OUTPUT);
   digitalWrite(pump, LOW);
   pinMode(all, OUTPUT);
   digitalWrite(all, LOW);
+  Serial.println(all);
 
-//  mySerial.begin (9600);
+  mySerial.begin (9600);
   mp3_set_serial (mySerial);//set softwareSerial for DFPlayer-mini mp3 module 
   mp3_set_volume (volume);  //громкость плеера
   mp3_set_EQ (5);
+//  Move(90,90,90,90,90,90, 90,90,90,90,90,90);
 
 
 
@@ -108,7 +113,7 @@ int led, int pump, int all, int volume,int sensor ){
   servo_pins[10] = r4;
   servo_pins[11] = r5;
 
-
+  AttachAll();
   Hello();
 }
 
@@ -147,6 +152,11 @@ long current_time = millis();
 while(1){
   distance = ultrasonic.distanceRead();
   sense_val = analogRead(sensor);
+  Serial.print(" distance: ");
+  Serial.println(distance);
+  Serial.print("sense_val ");
+  Serial.println(sense_val);
+  
   if ((millis() - current_time)> period){
     time_bool = true;
     break;
@@ -290,11 +300,12 @@ Patrik patrik;
 
 void setup() {
   // put your setup code here, to run once:
-  //patrik.init1();
-
+  patrik.init1();
+//patrik.Move(70,70,70,70,70,70, 70,70,70,70,70,70);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
  // patrik.Run();
+ patrik.Scan(30);
 }
