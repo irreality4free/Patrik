@@ -12,8 +12,7 @@ class Patrik{
   
   void init1(int l5=13, int l4=12, int l3=11, int l2=10, int l1=9, int neck=8 , int head=7, int r1=6, int r2=5, int r3=4, int r4=3, int r5=2,
             int led=45, int pump = 48, int all= 40, int volume = 30, int sensor = A0);
-//  void init1(int l5, int l4, int l3, int l2, int l1, int neck , int head, int r1, int r2, int r3, int r4, int r5,
-//  int led, int pump , int all, int volume , int sensor );
+
             
   void Move(int l5, int l4, int l3, int l2, int l1, int neck , int head, int r1, int r2, int r3, int r4, int r5);
   void Drink();
