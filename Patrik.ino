@@ -85,6 +85,7 @@ void Patrik::init1(int l5, int l4, int l3, int l2, int l1, int neck , int head, 
 int led_pin, int pump_pin, int all, int volume,int sensor ){
   
   Serial.begin(9600); //открываем последовательное соединение с компом
+  mySerial.begin (9600);
   led = led_pin;
   pump = pump_pin;
   randomSeed(analogRead(A6));
@@ -94,11 +95,14 @@ int led_pin, int pump_pin, int all, int volume,int sensor ){
   pinMode(all, OUTPUT);
   digitalWrite(all, LOW);
   Serial.println(all);
+  delay(1000);
 
-  mySerial.begin (9600);
-  mp3_set_serial (mySerial);//set softwareSerial for DFPlayer-mini mp3 module 
+  
+  mp3_set_serial (mySerial);
+  delay(1);   //set softwareSerial for DFPlayer-mini mp3 module 
   mp3_set_volume (volume);  //громкость плеера
   mp3_set_EQ (5);
+  mp3_play (2);
 //  Move(90,90,90,90,90,90, 90,90,90,90,90,90);
 
 
@@ -381,13 +385,14 @@ void setup() {
 //  pinMode(48, OUTPUT);
 //  digitalWrite(48, HIGH);
   patrik.init1();
+   
 //patrik.Move(30,90,90,90,90,90, 90, 90,90,90,90,90);
 //delay(2000);
 //patrik.Move(30,90,60,60,120,70, 80, 125,120,120,60,90);
 //patrik.Save();
 //patrik.Drink();
 //delay(2000);
-patrik.SelfPour();
+//patrik.SelfPour();
 //patrik.Pour();
 delay(2000);
 patrik.DetachAll();
@@ -396,6 +401,7 @@ patrik.DetachAll();
 }
 
 void loop() {
+  
   // put your main code here, to run repeatedly:
  // patrik.Run();
  patrik.Scan(30);
