@@ -11,14 +11,8 @@ class Patrik{
   public:
   
   void init1(int l5=13, int l4=12, int l3=11, int l2=10, int l1=9, int neck=8 , int head=7, int r1=6, int r2=5, int r3=4, int r4=3, int r5=2,
-<<<<<<< HEAD
-            int led_pin=45, int pump = 48, int all= 40, int volume = 30, int sensor = A0);
-//  void init1(int l5, int l4, int l3, int l2, int l1, int neck , int head, int r1, int r2, int r3, int r4, int r5,
-//  int led, int pump , int all, int volume , int sensor );
-=======
-            int led=45, int pump = 48, int all= 40, int volume = 30, int sensor = A0);
+            int led_pin=45, int pump_pin = 48, int all = 43, int volume = 30, int sensor = A0);
 
->>>>>>> 293ed17dacc88497a8f948ecef6654d293babb09
             
   void Move(int l5, int l4, int l3, int l2, int l1, int neck , int head, int r1, int r2, int r3, int r4, int r5, int del = 20);
   void Drink();
@@ -28,15 +22,16 @@ class Patrik{
   void DetachAll();
   void AttachAll();
   void Hello();
-  void Pour(int del = 2000);
-  void SelfPour(int del = 2000);
+  void Pour(int del = 3000);
+  void SelfPour(int del = 3000);
   void ResetBools();
   void Run();
   void Wag();
   void Save();
   void Led(bool state);
+  void Pump(bool state);
 
-  Patrik(int rx = 44,int tx =46, int trig =30,int echo =31):mySerial(rx,tx),ultrasonic(trig,echo){}
+  Patrik(int rx = 44,int tx =46 , int trig =30,int echo =31):mySerial(rx,tx),ultrasonic(trig,echo){}
   
  
   private:
@@ -53,22 +48,25 @@ class Patrik{
   bool sense_bool = false;
   bool time_bool = false;
   int led;
+  int pump;
    
   int sense_val;
   int sensor;
-//  Patrik() : ultrasonic(30, 31);
-//Ultrasonic* = new Ultrasonic(30, 31); 
-//mySerial = new SoftwareSerial(44,46);
+
 };
 
 
 
+void Patrik::Pump(bool state){
+  if (state) {
+    digitalWrite(pump, HIGH);
+  }
+  else{
+    digitalWrite(pump, LOW);
+  }
+  
+}
 
-//
-//Patrik::Patrik(void){
-//  ultrasonic = new Ultrasonic(30,31);
-//  mySerial = new SoftwareSerial(44,46);
-//}
 void Patrik::Save(){
   Serial.println("Save");
 for (int i =0; i<=11; i++){
@@ -84,10 +82,11 @@ for (int i =0; i<=11; i++){
 
 
 void Patrik::init1(int l5, int l4, int l3, int l2, int l1, int neck , int head, int r1, int r2, int r3, int r4, int r5,
-int led_pin, int pump, int all, int volume,int sensor ){
+int led_pin, int pump_pin, int all, int volume,int sensor ){
   
   Serial.begin(9600); //открываем последовательное соединение с компом
   led = led_pin;
+  pump = pump_pin;
   randomSeed(analogRead(A6));
   pinMode(led, OUTPUT);
   pinMode(pump, OUTPUT);
@@ -137,7 +136,7 @@ int led_pin, int pump, int all, int volume,int sensor ){
     servo[i].write(servo_positions[i]);
   }
   
-  Hello();
+//  Hello();
 }
 
 void Patrik::AttachAll(){
@@ -327,16 +326,25 @@ void Patrik::Drink(){
 void Patrik::Pour(int del){
   Move(30,90,60,60,120,70, 80, 125,120,120,60,90);
   Move(30,90,60,60,50,70, 80, 125,120,120,60,90);
+  Move(160,90,60,60,50,70, 80, 125,120,120,60,90);
+  Pump(1);
   delay (del);
+  Pump(0);
+  Move(30,90,60,60,50,70, 80, 125,120,120,60,90);
   Move(30,90,60,60,120,70, 80, 125,120,120,60,90);
   
 }
 
 void Patrik::SelfPour(int del){
   Move(30,90,60,60,120,70, 80, 125,120,120,60,90);
-  Move(30,90,60,60-10,50,70, 80, 125-25,120,120+20,60,90);
+  Move(0,90,60,60-10,50,70, 80, 125-25,120,120+20,60,90);
+  Move(130,90,60,60-10,50,70, 80, 125-25,120,120+20,60,90);
+  Pump(1);
   delay (del);
+  Pump(0);
+  Move(30,90,60,60-10,50,70, 80, 125-25,120,120+20,60,90);
   Move(30,90,60,60,120,70, 80, 125,120,120,60,90);
+  Drink();
 }
 
 
@@ -369,8 +377,9 @@ Patrik patrik;
 
 void setup() {
   // put your setup code here, to run once:
-  digitalWrite(45, HIGH);
-  digitalWrite(48, LOW);
+//  digitalWrite(45, HIGH);
+//  pinMode(48, OUTPUT);
+//  digitalWrite(48, HIGH);
   patrik.init1();
 //patrik.Move(30,90,90,90,90,90, 90, 90,90,90,90,90);
 //delay(2000);
@@ -379,9 +388,11 @@ void setup() {
 //patrik.Drink();
 //delay(2000);
 patrik.SelfPour();
+//patrik.Pour();
 delay(2000);
 patrik.DetachAll();
-patrik.Led(1);
+//patrik.Led(1);
+//patrik.Pump(1);
 }
 
 void loop() {
