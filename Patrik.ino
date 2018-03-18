@@ -25,11 +25,13 @@ class Patrik{
   void Pour(int del = 3000);
   void SelfPour(int del = 3000);
   void ResetBools();
-  void Run();
+  void Run(long time_b);
   void Wag();
   void Save();
   void Led(bool state);
   void Pump(bool state);
+  void Debug(String str);
+  void Nice(int del = 20);
 
   Patrik(int rx = 44,int tx =46 , int trig =30,int echo =31):mySerial(rx,tx),ultrasonic(trig,echo){}
   
@@ -52,10 +54,15 @@ class Patrik{
    
   int sense_val;
   int sensor;
+  bool debug = false;
 
 };
 
-
+void Patrik::Debug(String str){
+  if (debug){
+    Serial.print(str);
+  }
+}
 
 void Patrik::Pump(bool state){
   if (state) {
@@ -102,7 +109,8 @@ int led_pin, int pump_pin, int all, int volume,int sensor ){
   delay(1);   //set softwareSerial for DFPlayer-mini mp3 module 
   mp3_set_volume (volume);  //громкость плеера
   mp3_set_EQ (5);
-  mp3_play (2);
+  delay(200);
+  Say (10,11);
 //  Move(90,90,90,90,90,90, 90,90,90,90,90,90);
 
 
@@ -140,7 +148,7 @@ int led_pin, int pump_pin, int all, int volume,int sensor ){
     servo[i].write(servo_positions[i]);
   }
   
-//  Hello();
+  Hello();
 }
 
 void Patrik::AttachAll(){
@@ -174,28 +182,45 @@ void Patrik::ResetBools(){
 
 void Patrik::Scan(long period){
 long current_time = millis();
+Serial.println("start scan");
 
 while(1){
+  delay(100);
+  DetachHands();
   distance = ultrasonic.distanceRead();
   sense_val = analogRead(sensor);
-  Serial.print(" distance: ");
-  Serial.println(distance);
-  Serial.print("sense_val ");
-  Serial.println(sense_val);
+//  Serial.print(" distance: ");
+//  Serial.println(distance);
+//  Serial.print("sense_val ");
+//  Serial.println(sense_val);
+
+//  Serial.print(" millis: ");
+//  Serial.println(millis());
+//  Serial.print("current_time ");
+//  Serial.println(current_time);
+//  Serial.print("period ");
+//  Serial.println(period);
   
   if ((millis() - current_time)> period){
     time_bool = true;
+    AttachAll();
+    Serial.println("time bool");
     break;
   }
 
   if (sense_val<min_sense_val) {
+    AttachAll();
+    Serial.println("sense bool");
     sense_bool = true;
     break;  
   }
   if (distance<min_distance){
+    AttachAll();
+    Serial.println("dist bool");
     dist_bool = true;
-  }
     break;
+  }
+    
   }
 }
 
@@ -229,10 +254,10 @@ void Patrik::Move(int l5, int l4, int l3, int l2, int l1, int neck , int head, i
   int old_pos[12];
   for (int i = 0; i<=11; i++){
    old_pos[i]= servo[i].read();
-   Serial.print("old_pos[");
-        Serial.print(i);
-        Serial.print("] = ");
-   Serial.println(old_pos[i]);
+//   Serial.print("old_pos[");
+//        Serial.print(i);
+//        Serial.print("] = ");
+//   Serial.println(old_pos[i]);
   }
   while(1){
     for(int i = 0; i<=11; i++){
@@ -240,25 +265,25 @@ void Patrik::Move(int l5, int l4, int l3, int l2, int l1, int neck , int head, i
       if (new_pos[i]<old_pos[i]){
         old_pos[i]--;
         servo_positions[i]=old_pos[i];
-         Serial.print("old_pos[");
-        Serial.print(i);
-        Serial.print("] = ");
-        Serial.println(old_pos[i]);
+//         Serial.print("old_pos[");
+//        Serial.print(i);
+//        Serial.print("] = ");
+//        Serial.println(old_pos[i]);
       }
       if (new_pos[i]>old_pos[i]){
         old_pos[i]++;
         servo_positions[i]=old_pos[i];
-        Serial.print("old_pos[");
-        Serial.print(i);
-        Serial.print("] = ");
-        Serial.println(old_pos[i]);
+//        Serial.print("old_pos[");
+//        Serial.print(i);
+//        Serial.print("] = ");
+//        Serial.println(old_pos[i]);
       }
       servo[i].write(servo_positions[i]);
       
     }
     
     delay(del);
-    Serial.println("move...");
+//    Serial.println("move...");
    if(new_pos[0] == old_pos[0] &&
       new_pos[1] == old_pos[1] &&
       new_pos[2] == old_pos[2] &&
@@ -280,9 +305,9 @@ void Patrik::Move(int l5, int l4, int l3, int l2, int l1, int neck , int head, i
 }
 
 
-void Patrik::Run(){
+void Patrik::Run(long time_b){
   
-  Scan(30);
+  Scan(time_b);
   if(dist_bool){
      ResetBools();
      Pour();
@@ -291,10 +316,13 @@ void Patrik::Run(){
   if (sense_bool){
     ResetBools();
     Drink();
+    Nice();
   }
 
   if (time_bool){
+    ResetBools();
     SelfPour();
+    Nice();
   }
 }
 
@@ -305,60 +333,93 @@ void Patrik::Say(int from, int to){
 
 
 void Patrik::Hello(){
-  Say(1,3);
+ 
+  delay(3000);
+  Say(1,2);
   Wag();
 }
 
 void Patrik::Wag(){
-  Move(30,90,60,60,120,70, 80, 125,120,120,60,90);
-  Move(30,90,60,60,30,70, 80, 125,120,120,60,90);
-  Move(30,60,60,60,30,70+30, 40, 125,120,120,60,90);
-  Move(30,90,60,60,30,70, 80, 125,120,120,60,90);
-  Move(30,60,60,60,30,70-30, 40, 125,120,120,60,90);
-  Move(30,90,60,60,120,70, 80, 125,120,120,60,90);
+  //5vars
+  // 6 lines
+  Move(30-30,90,   60,60,120,70, 80, 125,120,120,60,90);
+  
+  Led(1);
+  Move(30-30,90,   60,60,120-80,   70,    80,    125,120,120,60,90);
+  Move(30-30,90-30,60,60,120-80,   70+30, 80-40, 125,120,120,60,90);
+  Move(30-30,90,   60,60,120-80,   70,    80,    125,120,120,60,90);
+  Say(2,3);
+  Move(30-30,90-30,60,60,40,       70-30, 80-40, 125,120,120,60,90);
+
+  
+  Move(30-30,90,   60,60,120,      70,    80,    125,120,120,60,90);
+  Led(0);
+  Say(3,4);
   
 }
 
 void Patrik::Drink(){
-  Move(30,90,60,60,120,70, 80, 125,120,120,60,90);
-  Move(30,90,60,60,120,70-30, 50, 180,120,120,60,90);
-  Move(30,90,60,60,120,70-30, 50, 180,120,120,60,40);
-  delay(2000);
-  Move(30,90,60,60,120,70, 80, 125,120,120,60,90);
+  //3vars
+  //5 lines
+  Say(4,7);
+  Move(30,90,60,60,120,70,    80,    125,   120,120,60,90);
+  Move(30,90,60,60,120,70-35, 80-40, 125+55,120,120,60,90,      50);
+  Move(30,90,60,60,120,70-35, 80-40, 125+55,120,120,60,90-50,   90);
+  
+  delay(3000);
+  Move(30,90,60,60,120,70-35, 80-40, 125+55,120,120,60,90);
+  Move(30,90,60,60,120,70,    80,    125,   120,120,60,90);
+  
+ 
 }
 
 void Patrik::Pour(int del){
-  Move(30,90,60,60,120,70, 80, 125,120,120,60,90);
-  Move(30,90,60,60,50,70, 80, 125,120,120,60,90);
-  Move(160,90,60,60,50,70, 80, 125,120,120,60,90);
+  //5 lines
+  //2vars
+  Say(8,9);
+  Move(30,    90,60,60,120,   70, 80, 125,120,120,60,90);
+  Move(30,    90,60,60,120-70,70, 80, 125,120,120,60,90);
+  Move(30+130,90,60,60,120-70,70, 80, 125,120,120,60,90);
   Pump(1);
   delay (del);
   Pump(0);
-  Move(30,90,60,60,50,70, 80, 125,120,120,60,90);
-  Move(30,90,60,60,120,70, 80, 125,120,120,60,90);
+  Move(30,    90,60,60,120-70,70, 80, 125,120,120,60,90);
+  Move(30,    90,60,60,120,   70, 80, 125,120,120,60,90);
   
 }
 
 void Patrik::SelfPour(int del){
-  Move(30,90,60,60,120,70, 80, 125,120,120,60,90);
-  Move(0,90,60,60-10,50,70, 80, 125-25,120,120+20,60,90);
-  Move(130,90,60,60-10,50,70, 80, 125-25,120,120+20,60,90);
+  //7 vars
+  //5 lines
+  Say(9,10); 
+  Move(30,   90,   60,60,   120,   70, 80, 125,   120,120,   60,90);
+  Move(30-30,90+20,60,60-20,120-80,70, 80, 125-40,120,120,   60,90-10);
+  Move(130,  90,   60,60-20,120-80,70, 80, 125-40,120,120+20,60,90-10);
   Pump(1);
   delay (del);
   Pump(0);
-  Move(30,90,60,60-10,50,70, 80, 125-25,120,120+20,60,90);
-  Move(30,90,60,60,120,70, 80, 125,120,120,60,90);
+  Move(30,   90,   60,60-20,120-80,70, 80, 125-40,120,120+20,60,90-10);
+  Move(30,   90,   60,60,   120,   70, 80, 125,   120,120,   60,90);
   Drink();
 }
 
 
+void Patrik::Nice(int del){
+  //2 vars
+  //5 lines
+  Say(7,8);
+  Led(1);
+  Move(30,90,60,60,120,70,    80,    125,120,120,60,90);
+  Move(30,90,60,60,120,70+30, 80-30, 125,120,120,60,90);
+  
+  Move(30,90,60,60,120,70,    80,    125,120,120,60,90);
+  Move(30,90,60,60,120,70-30, 80-30, 125,120,120,60,90);
+  
+  Move(30,90,60,60,120,70,    80,    125,120,120,60,90);
+  Led(0);
+}
 
-
-
-
-
-
-
+//16 lines
 
 
 
@@ -380,29 +441,15 @@ Patrik patrik;
 
 
 void setup() {
-  // put your setup code here, to run once:
-//  digitalWrite(45, HIGH);
-//  pinMode(48, OUTPUT);
-//  digitalWrite(48, HIGH);
+
   patrik.init1();
    
-//patrik.Move(30,90,90,90,90,90, 90, 90,90,90,90,90);
-//delay(2000);
-//patrik.Move(30,90,60,60,120,70, 80, 125,120,120,60,90);
-//patrik.Save();
-//patrik.Drink();
-//delay(2000);
-//patrik.SelfPour();
-//patrik.Pour();
-delay(2000);
-patrik.DetachAll();
-//patrik.Led(1);
-//patrik.Pump(1);
+
 }
 
 void loop() {
   
   // put your main code here, to run repeatedly:
- // patrik.Run();
- patrik.Scan(30);
+  patrik.Run(60000);
+
 }
