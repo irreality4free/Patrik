@@ -412,12 +412,9 @@ void Patrik::Drink() {
   Say(4, 7);
   Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],    start_pos[6],    start_pos[7],   start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
   Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5] - 35, start_pos[6] - 40, start_pos[7] + 55, start_pos[8], start_pos[9], start_pos[10], start_pos[11],      50);
-  //0 0 0 0 0 -35 -40 +55 0 0 0 0
   Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5] - 35, start_pos[6] - 40, start_pos[7] + 55, start_pos[8], start_pos[9], start_pos[10], start_pos[11] - 50,   90);
-  //0 0 0 0 0 -35 -40 +55 0 0 0 -50
   delay(3000);
   Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5] - 35, start_pos[6] - 40, start_pos[7] + 55, start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
-  //0 0 0 0 0 -35 -40 +55 0 0 0 0
   Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],    start_pos[6],    start_pos[7],   start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
 
 
@@ -428,17 +425,14 @@ void Patrik::SelfPour(int del) {
   //5 lines
   Say(9, 10);
   Move(start_pos[0],      start_pos[1],   start_pos[2], start_pos[3],   start_pos[4],   start_pos[5], start_pos[6], start_pos[7],   start_pos[8], start_pos[9],   start_pos[10], start_pos[11]);
+  
   Move(start_pos[0] - 30,   start_pos[1] + 20, start_pos[2], start_pos[3] - 20, start_pos[4] - 80, start_pos[5], start_pos[6], start_pos[7] - 40, start_pos[8], start_pos[9],   start_pos[10], start_pos[11] - 10);
-  //-30 20 0 -20 -80 0 0 -40 0 0 0 -10
   Move(start_pos[0] + 100,  start_pos[1],   start_pos[2], start_pos[3] - 20, start_pos[4] - 80, start_pos[5], start_pos[6], start_pos[7] - 40, start_pos[8], start_pos[9] + 20, start_pos[10], start_pos[11] - 10);
-  //-30 20 0 -20 -80 0 0 -40 0 0 0 -10
-  // 100 0 0 -20 -80 0 0 -40 0 20 0 -10
-  //0 0 0 -20 -80 0 0 -40 0 20 0 -10
   Pump(1);
   delay (del);
   Pump(0);
   Move(start_pos[0],      start_pos[1],   start_pos[2], start_pos[3] - 20, start_pos[4] - 80, start_pos[5], start_pos[6], start_pos[7] - 40, start_pos[8], start_pos[9] + 20, start_pos[10], start_pos[11] - 10);
-  //0 0 0 -20 -80 0 0 -40 0 20 0 -10
+
   Move(start_pos[0],      start_pos[1],   start_pos[2], start_pos[3],   start_pos[4],   start_pos[5], start_pos[6], start_pos[7],   start_pos[8], start_pos[9],   start_pos[10], start_pos[11]);
   Drink();
 }
@@ -451,17 +445,11 @@ void Patrik::Wag() {
 
   Led(1);
   Move(start_pos[0] - 30, start_pos[1],   start_pos[2], start_pos[3], start_pos[4] - 80,   start_pos[5],    start_pos[6],    start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
-
   Move(start_pos[0] - 30, start_pos[1] - 30, start_pos[2], start_pos[3], start_pos[4] - 80,   start_pos[5] + 30, start_pos[6] - 40, start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
-
   Move(start_pos[0] - 30, start_pos[1],   start_pos[2], start_pos[3], start_pos[4] - 80,   start_pos[5],    start_pos[6],    start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
-
   Say(2, 3);
   Move(start_pos[0] - 30, start_pos[1] - 30, start_pos[2], start_pos[3], start_pos[4] - 80,   start_pos[5] - 30, start_pos[6] - 40, start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
-  //-30 0 0 0 -80 0 0 0 0 0 0 0
-  //-30 -30 0 0 -80 30 -40 0 0 0 0 0
-  //-30 0 0 0 -80 0 0 0 0 0 0 0
-  //-30 -30 0 0 -80 -30 -40 0 0 0 0 0
+
 
 
   Move(start_pos[0] - 30, start_pos[1],   start_pos[2], start_pos[3], start_pos[4],      start_pos[5],    start_pos[6],    start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
@@ -477,11 +465,7 @@ void Patrik::Pour(int del) {
   Say(8, 9);
   Move(start_pos[0],    start_pos[1], start_pos[2], start_pos[3], start_pos[4],   start_pos[5], start_pos[6], start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
   Move(start_pos[0],    start_pos[1], start_pos[2], start_pos[3], start_pos[4] - 70, start_pos[5], start_pos[6], start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
-
   Move(start_pos[0] + 130, start_pos[1], start_pos[2], start_pos[3], start_pos[4] - 70, start_pos[5], start_pos[6], start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
-  //0 0 0 0 -70 0 0 0 0 0 0 0
-  //130 0 0 0 -70 0 0 0 0 0 0 0
-  //0 0 0 0 -70 0 0 0 0 0 0 0
   Pump(1);
   delay (del);
   Pump(0);
@@ -501,16 +485,11 @@ void Patrik::Nice(int del) {
   Say(7, 8);
   Led(1);
   Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],    start_pos[6],    start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
+  
   Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5] + 30, start_pos[6] - 30, start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
-
-
   Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],    start_pos[6],    start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
-  //0 0 0 0 0 30 -30 0 0 0 0 0
-  //0 0 0 0 0 0 0 0 0 0 0 0
-  //0 0 0 0 0 -30 -30 0 0 0 0 0
   Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5] - 30, start_pos[6] - 30, start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
-
-
+  
   Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],    start_pos[6],    start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
   Led(0);
 }
@@ -539,17 +518,18 @@ void Patrik::SaveDrink() {
     Serial.println("Save");
   }
   for (int i = drink_s_1; i <= drink_e_1; i++) {
-    EEPROM.write(i, servo_positions[i]);
+    EEPROM.write(i, drink[0][i-12]);
   }
 
   for (int i = drink_s_2; i <= drink_e_2; i++) {
-    EEPROM.write(i, servo_positions[i]);
+    EEPROM.write(i, drink[1][i-12*2]);
   }
 
 
   for (int i = drink_s_3; i <= drink_e_3; i++) {
-    EEPROM.write(i, servo_positions[i]);
+    EEPROM.write(i, drink[2][i-12*3]);
   }
+
 }
 
 
@@ -559,16 +539,16 @@ void Patrik::SaveSelfPour() {
     Serial.println("Save");
   }
   for (int i = selfPour_s_1; i <= selfPour_e_1; i++) {
-    EEPROM.write(i, servo_positions[i]);
+    EEPROM.write(i, selfPour[0][i-12*4]);
   }
 
   for (int i = selfPour_s_2; i <= selfPour_e_2; i++) {
-    EEPROM.write(i, servo_positions[i]);
+    EEPROM.write(i, selfPour[1][i-12*5]);
   }
 
 
   for (int i = selfPour_s_3; i <= selfPour_e_3; i++) {
-    EEPROM.write(i, servo_positions[i]);
+    EEPROM.write(i, selfPour[2][i-12*6]);
   }
 
 
@@ -580,20 +560,20 @@ void Patrik::SaveSelfPour() {
 
 void Patrik::SaveWag() {
   for (int i = wag_s_1; i <= wag_e_1; i++) {
-    EEPROM.write(i, servo_positions[i]);
+    EEPROM.write(i, wag[0][i-12*7]);
   }
 
   for (int i = wag_s_2; i <= wag_e_2; i++) {
-    EEPROM.write(i, servo_positions[i]);
+    EEPROM.write(i, wag[1][i-12*8]);
   }
 
 
   for (int i = wag_s_3; i <= wag_e_3; i++) {
-    EEPROM.write(i, servo_positions[i]);
+    EEPROM.write(i, wag[2][i-12*9]);
   }
 
   for (int i = wag_s_4; i <= wag_e_4; i++) {
-    EEPROM.write(i, servo_positions[i]);
+    EEPROM.write(i, wag[3][i-12*10]);
   }
 
 }
@@ -605,16 +585,16 @@ void Patrik::SavePour() {
     Serial.println("Save");
   }
   for (int i = pour_s_1; i <= pour_e_1; i++) {
-    EEPROM.write(i, servo_positions[i]);
+    EEPROM.write(i, pour[0][i-12*11]);
   }
 
   for (int i = pour_s_2; i <= pour_e_2; i++) {
-    EEPROM.write(i, servo_positions[i]);
+    EEPROM.write(i, pour[1][i-12*12]);
   }
 
 
   for (int i = pour_s_3; i <= pour_e_3; i++) {
-    EEPROM.write(i, servo_positions[i]);
+    EEPROM.write(i, pour[2][i-12*13]);
   }
 }
 
@@ -625,16 +605,16 @@ void Patrik::SaveNice() {
     Serial.println("Save");
   }
   for (int i = nice_s_1; i <= nice_e_1; i++) {
-    EEPROM.write(i, servo_positions[i]);
+    EEPROM.write(i, nice[0][i-12*14]);
   }
 
   for (int i = nice_s_2; i <= nice_e_2; i++) {
-    EEPROM.write(i, servo_positions[i]);
+    EEPROM.write(i, nice[1][i-12*15]);
   }
 
 
   for (int i = nice_s_3; i <= nice_e_3; i++) {
-    EEPROM.write(i, servo_positions[i]);
+    EEPROM.write(i, nice[2][i-12*16]);
   }
 }
 
@@ -673,66 +653,66 @@ Patrik patrik;
 //0 0 0 0 0 -30 -30 0 0 0 0 0
 
 
-int drink[3][12] = { { 0, 0, 0, 0, 0, -35, -40, 55, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, -35, -40, 55, 0, 0, 0, -50 }, { 0, 0, 0, 0, 0, -35, -40, 55, 0, 0, 0, 0 } } ;
-int selfPour[3][12] = { { -30, 20, 0, -20, -80, 0, 0, -40, 0, 0, 0, -10  }, { 100, 0, 0, -20, -80, 0, 0, -40, 0, 20, 0, -10 }, { 0, 0, 0, -20, -80, 0, 0, -40, 0, 20, 0, -10 } };
-int wag[4][12] = { { -30, 0, 0, 0, -80, 0, 0, 0, 0, 0, 0, 0 }, { -30, -30, 0, 0, -80, 30, -40, 0, 0, 0, 0, 0 }, { -30, 0, 0, 0, -80, 0, 0, 0, 0, 0, 0, 0 }, { -30, -30, 0, 0, -80, -30, -40, 0, 0, 0, 0, 0 } };
-int pour[3][12] = { { 0, 0, 0, 0, -70, 0, 0, 0, 0, 0, 0, 0 }, { 130, 0, 0, 0, -70, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, -70, 0, 0, 0, 0, 0, 0, 0 } };
-int nice[3][12] = { { 0, 0, 0, 0, 0, 30, -30, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, -30, -30, 0, 0, 0, 0, 0 } };
-
-int drink_s_1 = 12;
-int drink_e_1 = 23;
-
-int drink_s_2 = 24;
-int drink_e_2 = 35;
-
-int drink_s_3 = 36;
-int drink_e_3 = 47;
-
-
-int selfPour_s_1 = 48;
-int selfPour_e_1 = 59;
-
-int selfPour_s_2 = 60;
-int selfPour_e_2 = 71;
-
-int selfPour_s_3 = 72;
-int selfPour_e_3 = 83;
-
-
-
-int wag_s_1 = 84;
-int wag_e_1 = 95;
-
-int wag_s_2 = 96;
-int wag_e_2 = 107;
-
-int wag_s_3 = 108;
-int wag_e_3 = 119;
-
-int wag_s_4 = 120;
-int wag_e_4 = 131;
-
-
-
-int pour_s_1 = 132;
-int pour_e_1 = 143;
-
-int pour_s_2 = 144;
-int pour_e_2 = 155;
-
-int pour_s_3 = 156;
-int pour_e_3 = 167;
-
-
-
-int nice_s_1 = 168;
-int nice_e_1 = 179;
-
-int nice_s_2 = 180;
-int nice_e_2 = 191;
-
-int nice_s_3 = 192;
-int nice_e_3 = 203;
+//int drink[3][12] = { { 0, 0, 0, 0, 0, -35, -40, 55, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, -35, -40, 55, 0, 0, 0, -50 }, { 0, 0, 0, 0, 0, -35, -40, 55, 0, 0, 0, 0 } } ;
+//int selfPour[3][12] = { { -30, 20, 0, -20, -80, 0, 0, -40, 0, 0, 0, -10  }, { 100, 0, 0, -20, -80, 0, 0, -40, 0, 20, 0, -10 }, { 0, 0, 0, -20, -80, 0, 0, -40, 0, 20, 0, -10 } };
+//int wag[4][12] = { { -30, 0, 0, 0, -80, 0, 0, 0, 0, 0, 0, 0 }, { -30, -30, 0, 0, -80, 30, -40, 0, 0, 0, 0, 0 }, { -30, 0, 0, 0, -80, 0, 0, 0, 0, 0, 0, 0 }, { -30, -30, 0, 0, -80, -30, -40, 0, 0, 0, 0, 0 } };
+//int pour[3][12] = { { 0, 0, 0, 0, -70, 0, 0, 0, 0, 0, 0, 0 }, { 130, 0, 0, 0, -70, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, -70, 0, 0, 0, 0, 0, 0, 0 } };
+//int nice[3][12] = { { 0, 0, 0, 0, 0, 30, -30, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, -30, -30, 0, 0, 0, 0, 0 } };
+//
+//int drink_s_1 = 12;
+//int drink_e_1 = 23;
+//
+//int drink_s_2 = 24;
+//int drink_e_2 = 35;
+//
+//int drink_s_3 = 36;
+//int drink_e_3 = 47;
+//
+//
+//int selfPour_s_1 = 48;
+//int selfPour_e_1 = 59;
+//
+//int selfPour_s_2 = 60;
+//int selfPour_e_2 = 71;
+//
+//int selfPour_s_3 = 72;
+//int selfPour_e_3 = 83;
+//
+//
+//
+//int wag_s_1 = 84;
+//int wag_e_1 = 95;
+//
+//int wag_s_2 = 96;
+//int wag_e_2 = 107;
+//
+//int wag_s_3 = 108;
+//int wag_e_3 = 119;
+//
+//int wag_s_4 = 120;
+//int wag_e_4 = 131;
+//
+//
+//
+//int pour_s_1 = 132;
+//int pour_e_1 = 143;
+//
+//int pour_s_2 = 144;
+//int pour_e_2 = 155;
+//
+//int pour_s_3 = 156;
+//int pour_e_3 = 167;
+//
+//
+//
+//int nice_s_1 = 168;
+//int nice_e_1 = 179;
+//
+//int nice_s_2 = 180;
+//int nice_e_2 = 191;
+//
+//int nice_s_3 = 192;
+//int nice_e_3 = 203;
 
 
 
@@ -740,95 +720,16 @@ int nice_e_3 = 203;
 
 
 void setup() {
-Serial.begin(9600);
+
   //  patrik.init1();
-  Serial.println("start eeprom fill");
-  delay(5000);
-
-  for (int i = drink_s_1; i <= drink_e_1; i++) {
-    EEPROM.write(i, drink[0][i-12]);
-  }
-
-  for (int i = drink_s_2; i <= drink_e_2; i++) {
-    EEPROM.write(i, drink[1][i-12*2]);
-  }
 
 
-  for (int i = drink_s_3; i <= drink_e_3; i++) {
-    EEPROM.write(i, drink[2][i-12*3]);
-  }
-
-
-
-
-
-  for (int i = selfPour_s_1; i <= selfPour_e_1; i++) {
-    EEPROM.write(i, selfPour[0][i-12*4]);
-  }
-
-  for (int i = selfPour_s_2; i <= selfPour_e_2; i++) {
-    EEPROM.write(i, selfPour[1][i-12*5]);
-  }
-
-
-  for (int i = selfPour_s_3; i <= selfPour_e_3; i++) {
-    EEPROM.write(i, selfPour[2][i-12*6]);
-  }
-
-
-  for (int i = wag_s_1; i <= wag_e_1; i++) {
-    EEPROM.write(i, wag[0][i-12*7]);
-  }
-
-  for (int i = wag_s_2; i <= wag_e_2; i++) {
-    EEPROM.write(i, wag[1][i-12*8]);
-  }
-
-
-  for (int i = wag_s_3; i <= wag_e_3; i++) {
-    EEPROM.write(i, wag[2][i-12*9]);
-  }
-
-  for (int i = wag_s_4; i <= wag_e_4; i++) {
-    EEPROM.write(i, wag[3][i-12*10]);
-  }
-
-
-  for (int i = pour_s_1; i <= pour_e_1; i++) {
-    EEPROM.write(i, pour[0][i-12*11]);
-  }
-
-  for (int i = pour_s_2; i <= pour_e_2; i++) {
-    EEPROM.write(i, pour[1][i-12*12]);
-  }
-
-
-  for (int i = pour_s_3; i <= pour_e_3; i++) {
-    EEPROM.write(i, pour[2][i-12*13]);
-  }
-
-
-  for (int i = nice_s_1; i <= nice_e_1; i++) {
-    EEPROM.write(i, nice[0][i-12*14]);
-  }
-
-  for (int i = nice_s_2; i <= nice_e_2; i++) {
-    EEPROM.write(i, nice[1][i-12*15]);
-  }
-
-
-  for (int i = nice_s_3; i <= nice_e_3; i++) {
-    EEPROM.write(i, nice[2][i-12*16]);
-  }
-delay(5000);
- Serial.println("end eeprom fill");
   
 
 }
 
 void loop() {
 
-  // put your main code here, to run repeatedly:
   //  patrik.Run(60000);
 
 }
