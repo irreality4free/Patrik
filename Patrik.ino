@@ -171,7 +171,7 @@ void Patrik::init1(int l5, int l4, int l3, int l2, int l1, int neck , int head, 
 
   mp3_set_serial (mySerial);
   delay(1);   //set softwareSerial for DFPlayer-mini mp3 module
-  mp3_set_volume (volume);  //громкость плеера
+  mp3_set_volume (5);  //громкость плеера
   mp3_set_EQ (5);
   delay(200);
   Say (10, 11);
@@ -185,13 +185,132 @@ void Patrik::init1(int l5, int l4, int l3, int l2, int l1, int neck , int head, 
     for (int i = 0; i <= 11; i++) {
       EEPROM.write(i, 90);
     }
+    for (int i = 12; i<=205; i++){
+      EEPROM.write(i, 0);
+    }
   }
+
+  
 
 
   for (int i = 0; i <= 11; i++) {
     servo_positions[i] =  EEPROM.read(i);
     start_pos[i] = EEPROM.read(i);
   }
+
+
+
+///READ DRINK POS
+  for (int i = drink_s_1; i <= drink_e_1; i++) {
+   drink[0][i-12]= EEPROM.read(i);
+  }
+
+  for (int i = drink_s_2; i <= drink_e_2; i++) {
+    drink[1][i-12*2]= EEPROM.read(i);
+  }
+
+
+  for (int i = drink_s_3; i <= drink_e_3; i++) {
+    drink[2][i-12*3]= EEPROM.read(i);
+  }
+
+/////
+Serial.println(" Start self pour");
+  for (int i = selfPour_s_1; i <= selfPour_e_1; i++) {
+    selfPour[0][i-12*4]= EEPROM.read(i);
+     delay(2);
+    Serial.print(selfPour[0][i-12*4]);
+    Serial.print(" ");
+    delay(2);
+  }
+Serial.println(" ");
+  for (int i = selfPour_s_2; i <= selfPour_e_2; i++) {
+    selfPour[1][i-12*5]= EEPROM.read(i);
+     delay(2);
+    Serial.print(selfPour[1][i-12*5]);
+    Serial.print(" ");
+    delay(2);
+  }
+
+Serial.println(" ");
+  for (int i = selfPour_s_3; i <= selfPour_e_3; i++) {
+    selfPour[2][i-12*6]= EEPROM.read(i);
+     delay(2);
+    Serial.print(selfPour[2][i-12*6]);
+    Serial.print(" ");
+    delay(2);
+  }
+Serial.println("end self pour ");
+////
+Serial.println("start wag ");
+  for (int i = wag_s_1; i <= wag_e_1; i++) {
+    wag[0][i-12*7]= EEPROM.read(i);
+    delay(2);
+    Serial.print(wag[0][i-12*7]);
+    Serial.print(" ");
+    delay(2);
+  }
+  Serial.println(" ");
+  for (int i = wag_s_2; i <= wag_e_2; i++) {
+    wag[1][i-12*8]= EEPROM.read(i);
+    delay(2);
+    Serial.print(wag[1][i-12*8]);
+    Serial.print(" ");
+    
+  }
+
+  Serial.println(" ");
+  for (int i = wag_s_3; i <= wag_e_3; i++) {
+    wag[2][i-12*9]= EEPROM.read(i);
+    delay(2);
+    Serial.print(wag[2][i-12*9]);
+    Serial.print(" ");
+    
+  }
+  Serial.println(" ");
+  for (int i = wag_s_4; i <= wag_e_4; i++) {
+    wag[3][i-12*10]= EEPROM.read(i);
+    delay(2);
+    Serial.print(wag[3][i-12*10]);
+    Serial.print(" ");
+    
+  }
+
+Serial.println("end wag ");
+////
+
+ for (int i = pour_s_1; i <= pour_e_1; i++) {
+    pour[0][i-12*11] = EEPROM.read(i);
+  }
+
+  for (int i = pour_s_2; i <= pour_e_2; i++) {
+    pour[1][i-12*12] = EEPROM.read(i);
+  }
+
+
+  for (int i = pour_s_3; i <= pour_e_3; i++) {
+    pour[2][i-12*13] = EEPROM.read(i);
+  }
+
+//////
+
+
+
+ for (int i = nice_s_1; i <= nice_e_1; i++) {
+   nice[0][i-12*14] = EEPROM.read(i);
+  }
+
+  for (int i = nice_s_2; i <= nice_e_2; i++) {
+    nice[1][i-12*15] = EEPROM.read(i);
+  }
+
+
+  for (int i = nice_s_3; i <= nice_e_3; i++) {
+    nice[2][i-12*16] = EEPROM.read(i);
+  }
+  
+
+
 
   servo_pins[0] = l5;
   servo_pins[1] = l4;
@@ -214,6 +333,7 @@ void Patrik::init1(int l5, int l4, int l3, int l2, int l1, int neck , int head, 
   }
 
   Hello();
+Serial.println("end init");
 }
 
 void Patrik::AttachAll() {
@@ -246,6 +366,7 @@ void Patrik::ResetBools() {
 }
 
 void Patrik::Scan(long period) {
+  delay(2000);
   long current_time = millis();
   Serial.println("start scan");
 
@@ -410,12 +531,15 @@ void Patrik::Drink() {
   //5 lines
 
   Say(4, 7);
-  Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],    start_pos[6],    start_pos[7],   start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
-  Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5] - 35, start_pos[6] - 40, start_pos[7] + 55, start_pos[8], start_pos[9], start_pos[10], start_pos[11],      50);
-  Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5] - 35, start_pos[6] - 40, start_pos[7] + 55, start_pos[8], start_pos[9], start_pos[10], start_pos[11] - 50,   90);
+
+  Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
+  
+  Move(drink[0][0], drink[0][1], drink[0][2], drink[0][3], drink[0][4], drink[0][5], drink[0][6], drink[0][7], drink[0][8], drink[0][9], drink[0][10], drink[0][11],      50);
+  Move(drink[1][0], drink[1][1], drink[1][2], drink[1][3], drink[1][4], drink[1][5], drink[1][6], drink[1][7], drink[1][8], drink[1][9], drink[1][10], drink[1][11],      90);
   delay(3000);
-  Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5] - 35, start_pos[6] - 40, start_pos[7] + 55, start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
-  Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],    start_pos[6],    start_pos[7],   start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
+  Move(drink[2][0], drink[2][1], drink[2][2], drink[2][3], drink[2][4], drink[2][5], drink[2][6], drink[2][7], drink[2][8], drink[2][9], drink[2][10], drink[2][11]);
+  
+  Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
 
 
 }
@@ -424,16 +548,16 @@ void Patrik::SelfPour(int del) {
   //7 vars
   //5 lines
   Say(9, 10);
-  Move(start_pos[0],      start_pos[1],   start_pos[2], start_pos[3],   start_pos[4],   start_pos[5], start_pos[6], start_pos[7],   start_pos[8], start_pos[9],   start_pos[10], start_pos[11]);
+  Move(start_pos[0],        start_pos[1],      start_pos[2], start_pos[3],      start_pos[4],      start_pos[5], start_pos[6], start_pos[7],      start_pos[8], start_pos[9],      start_pos[10], start_pos[11]);
   
-  Move(start_pos[0] - 30,   start_pos[1] + 20, start_pos[2], start_pos[3] - 20, start_pos[4] - 80, start_pos[5], start_pos[6], start_pos[7] - 40, start_pos[8], start_pos[9],   start_pos[10], start_pos[11] - 10);
-  Move(start_pos[0] + 100,  start_pos[1],   start_pos[2], start_pos[3] - 20, start_pos[4] - 80, start_pos[5], start_pos[6], start_pos[7] - 40, start_pos[8], start_pos[9] + 20, start_pos[10], start_pos[11] - 10);
+  Move(selfPour[0][0], selfPour[0][1], selfPour[0][2], selfPour[0][3], selfPour[0][4], selfPour[0][5], selfPour[0][6], selfPour[0][7], selfPour[0][8], selfPour[0][9], selfPour[0][10], selfPour[0][11]);
+  Move(selfPour[1][0], selfPour[1][1], selfPour[1][2], selfPour[1][3], selfPour[1][4], selfPour[1][5], selfPour[1][6], selfPour[1][7], selfPour[1][8], selfPour[1][9], selfPour[1][10], selfPour[1][11]);
   Pump(1);
   delay (del);
   Pump(0);
-  Move(start_pos[0],      start_pos[1],   start_pos[2], start_pos[3] - 20, start_pos[4] - 80, start_pos[5], start_pos[6], start_pos[7] - 40, start_pos[8], start_pos[9] + 20, start_pos[10], start_pos[11] - 10);
+  Move(selfPour[2][0], selfPour[2][1], selfPour[2][2], selfPour[2][3], selfPour[2][4], selfPour[2][5], selfPour[2][6], selfPour[2][7], selfPour[2][8], selfPour[2][9], selfPour[2][10], selfPour[2][11]);
 
-  Move(start_pos[0],      start_pos[1],   start_pos[2], start_pos[3],   start_pos[4],   start_pos[5], start_pos[6], start_pos[7],   start_pos[8], start_pos[9],   start_pos[10], start_pos[11]);
+  Move(start_pos[0],        start_pos[1],      start_pos[2], start_pos[3],      start_pos[4],      start_pos[5], start_pos[6], start_pos[7],      start_pos[8], start_pos[9],      start_pos[10], start_pos[11]);
   Drink();
 }
 
@@ -444,15 +568,15 @@ void Patrik::Wag() {
   Move(start_pos[0] - 30, start_pos[1],   start_pos[2], start_pos[3], start_pos[4],      start_pos[5],    start_pos[6],    start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
 
   Led(1);
-  Move(start_pos[0] - 30, start_pos[1],   start_pos[2], start_pos[3], start_pos[4] - 80,   start_pos[5],    start_pos[6],    start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
-  Move(start_pos[0] - 30, start_pos[1] - 30, start_pos[2], start_pos[3], start_pos[4] - 80,   start_pos[5] + 30, start_pos[6] - 40, start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
-  Move(start_pos[0] - 30, start_pos[1],   start_pos[2], start_pos[3], start_pos[4] - 80,   start_pos[5],    start_pos[6],    start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
+  Move(wag[0][0], wag[0][1], wag[0][2], wag[0][3], wag[0][4], wag[0][5], wag[0][6], wag[0][7], wag[0][8], wag[0][9], wag[0][10], wag[0][11]);
+  Move(wag[1][0], wag[1][1], wag[1][2], wag[1][3], wag[1][4], wag[1][5], wag[1][6], wag[1][7], wag[1][8], wag[1][9], wag[1][10], wag[1][11]);
+  Move(wag[2][0], wag[2][1], wag[2][2], wag[2][3], wag[2][4], wag[2][5], wag[2][6], wag[2][7], wag[2][8], wag[2][9], wag[2][10], wag[2][11]);
   Say(2, 3);
-  Move(start_pos[0] - 30, start_pos[1] - 30, start_pos[2], start_pos[3], start_pos[4] - 80,   start_pos[5] - 30, start_pos[6] - 40, start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
+  Move(wag[3][0], wag[3][1], wag[3][2], wag[3][3], wag[3][4], wag[3][5], wag[3][6], wag[3][7], wag[3][8], wag[3][9], wag[3][10], wag[3][11]);
 
 
 
-  Move(start_pos[0] - 30, start_pos[1],   start_pos[2], start_pos[3], start_pos[4],      start_pos[5],    start_pos[6],    start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
+  Move(start_pos[0] - 30, start_pos[1],      start_pos[2], start_pos[3], start_pos[4],        start_pos[5],      start_pos[6],      start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
   Led(0);
   Say(3, 4);
 
@@ -463,15 +587,15 @@ void Patrik::Pour(int del) {
   //5 lines
   //2vars
   Say(8, 9);
-  Move(start_pos[0],    start_pos[1], start_pos[2], start_pos[3], start_pos[4],   start_pos[5], start_pos[6], start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
-  Move(start_pos[0],    start_pos[1], start_pos[2], start_pos[3], start_pos[4] - 70, start_pos[5], start_pos[6], start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
-  Move(start_pos[0] + 130, start_pos[1], start_pos[2], start_pos[3], start_pos[4] - 70, start_pos[5], start_pos[6], start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
+  Move(start_pos[0],       start_pos[1], start_pos[2], start_pos[3], start_pos[4],      start_pos[5], start_pos[6], start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
+  Move(pour[0][0], pour[0][1], pour[0][2], pour[0][3], pour[0][4], pour[0][5], pour[0][6], pour[0][7], pour[0][8], pour[0][9], pour[0][10], pour[0][11]);
+  Move(pour[1][0], pour[1][1], pour[1][2], pour[1][3], pour[1][4], pour[1][5], pour[1][6], pour[1][7], pour[1][8], pour[1][9], pour[1][10], pour[1][11]);
   Pump(1);
   delay (del);
   Pump(0);
-  Move(start_pos[0],    start_pos[1], start_pos[2], start_pos[3], start_pos[4] - 70, start_pos[5], start_pos[6], start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
+  Move(pour[2][0], pour[2][1], pour[2][2], pour[2][3], pour[2][4], pour[2][5], pour[2][6], pour[2][7], pour[2][8], pour[2][9], pour[2][10], pour[2][11]);
 
-  Move(start_pos[0],    start_pos[1], start_pos[2], start_pos[3], start_pos[4],   start_pos[5], start_pos[6], start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
+  Move(start_pos[0],       start_pos[1], start_pos[2], start_pos[3], start_pos[4],      start_pos[5], start_pos[6], start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
 
 
 }
@@ -484,13 +608,13 @@ void Patrik::Nice(int del) {
   //5 lines
   Say(7, 8);
   Led(1);
-  Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],    start_pos[6],    start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
+  Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
   
-  Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5] + 30, start_pos[6] - 30, start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
-  Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],    start_pos[6],    start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
-  Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5] - 30, start_pos[6] - 30, start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
+  Move(nice[0][0], nice[0][1], nice[0][2], nice[0][3], nice[0][4], nice[0][5], nice[0][6], nice[0][7], nice[0][8], nice[0][9], nice[0][10], nice[0][11]);
+  Move(nice[1][0], nice[1][1], nice[1][2], nice[1][3], nice[1][4], nice[1][5], nice[1][6], nice[1][7], nice[1][8], nice[1][9], nice[1][10], nice[1][11]);
+  Move(nice[2][0], nice[2][1], nice[2][2], nice[2][3], nice[2][4], nice[2][5], nice[2][6], nice[2][7], nice[2][8], nice[2][9], nice[2][10], nice[2][11]);
   
-  Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],    start_pos[6],    start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
+  Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
   Led(0);
 }
 
@@ -653,11 +777,11 @@ Patrik patrik;
 //0 0 0 0 0 -30 -30 0 0 0 0 0
 
 
-//int drink[3][12] = { { 0, 0, 0, 0, 0, -35, -40, 55, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, -35, -40, 55, 0, 0, 0, -50 }, { 0, 0, 0, 0, 0, -35, -40, 55, 0, 0, 0, 0 } } ;
-//int selfPour[3][12] = { { -30, 20, 0, -20, -80, 0, 0, -40, 0, 0, 0, -10  }, { 100, 0, 0, -20, -80, 0, 0, -40, 0, 20, 0, -10 }, { 0, 0, 0, -20, -80, 0, 0, -40, 0, 20, 0, -10 } };
-//int wag[4][12] = { { -30, 0, 0, 0, -80, 0, 0, 0, 0, 0, 0, 0 }, { -30, -30, 0, 0, -80, 30, -40, 0, 0, 0, 0, 0 }, { -30, 0, 0, 0, -80, 0, 0, 0, 0, 0, 0, 0 }, { -30, -30, 0, 0, -80, -30, -40, 0, 0, 0, 0, 0 } };
-//int pour[3][12] = { { 0, 0, 0, 0, -70, 0, 0, 0, 0, 0, 0, 0 }, { 130, 0, 0, 0, -70, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, -70, 0, 0, 0, 0, 0, 0, 0 } };
-//int nice[3][12] = { { 0, 0, 0, 0, 0, 30, -30, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, -30, -30, 0, 0, 0, 0, 0 } };
+//int drink[3][12] = { { 30, 90, 60, 60, 120, 70-35, 80-40,125+55, 120, 120, 60, 90 },               { 30, 90,    60, 60, 120,      70-35, 80-40, 125+55, 120, 120, 60, 90-50 }, { 30, 90, 60,   60, 120, 70 -35, 80-40,125+55,120, 120, 60, 90 } } ;
+int selfPour[3][12] = { { 30-30, 90+20, 60, 60-20, 120-80, 70, 80, 125-40, 120, 120, 60, 90-10  }, { 30+100, 90,60,60 -20,120 -80, 70, 80, 125-40, 120, 120+20,60, 90-10 },       { 30, 90, 60, 60-20, 120-80, 70, 80, 125 -40, 120, 120+20, 60, 90-10 } };
+//int wag[4][12] = { { 30-30, 90, 60, 60, 120-80, 70, 80,125, 120, 120, 60, 90 }, { 30-30, 90-30, 60, 60, 120-80, 70+30, 80-40,125, 120, 120, 60, 90  }, { 30-30, 90, 60, 60, 120-80,70, 80,125, 120, 120, 60, 90 }, { 30-30, 90-30, 60, 60, 120-80, 70-30, 80-40,125, 120, 120, 60, 90  } };
+//int pour[3][12] = { { 30, 90, 60, 60, 120-70, 70, 80, 125, 120, 120, 60, 90}, { 30+130, 90, 60, 60, 120-70, 70, 80, 125, 120, 120, 60, 90 }, { 30, 90, 60, 60, 120-70, 70, 80,125, 120, 120, 60, 90 } };
+//int nice[3][12] = { { 30, 90, 60, 60, 120,70+ 30, 80-30, 125, 120, 120, 60, 90 }, {  30, 90, 60, 60, 120,70, 80, 125, 120, 120, 60, 90 }, { 30, 90, 60, 60, 120, 70-30, 80-30, 125, 120, 120, 60, 90} };
 //
 //int drink_s_1 = 12;
 //int drink_e_1 = 23;
@@ -672,26 +796,26 @@ Patrik patrik;
 //int selfPour_s_1 = 48;
 //int selfPour_e_1 = 59;
 //
-//int selfPour_s_2 = 60;
-//int selfPour_e_2 = 71;
+int selfPour_s_2 = 60;
+int selfPour_e_2 = 71;
 //
 //int selfPour_s_3 = 72;
 //int selfPour_e_3 = 83;
 //
 //
-//
-//int wag_s_1 = 84;
-//int wag_e_1 = 95;
-//
-//int wag_s_2 = 96;
-//int wag_e_2 = 107;
-//
-//int wag_s_3 = 108;
-//int wag_e_3 = 119;
-//
-//int wag_s_4 = 120;
-//int wag_e_4 = 131;
-//
+
+int wag_s_1 = 84;
+int wag_e_1 = 95;
+
+int wag_s_2 = 96;
+int wag_e_2 = 107;
+
+int wag_s_3 = 108;
+int wag_e_3 = 119;
+
+int wag_s_4 = 120;
+int wag_e_4 = 131;
+
 //
 //
 //int pour_s_1 = 132;
@@ -720,9 +844,39 @@ Patrik patrik;
 
 
 void setup() {
+ 
+    patrik.init1();
+//Serial.begin(9600);
+//Serial.println("start");
+//for (int i = wag_s_1;i<=wag_e_1; i++){
+//  Serial.print(EEPROM.read(i));
+//  Serial.print(" ");
+//}
+//
+//Serial.println(" ");
+//for (int i = wag_s_2;i<=wag_e_2; i++){
+//  Serial.print(EEPROM.read(i));
+//  Serial.print(" ");
+//}
+//
+//Serial.println(" ");
+//for (int i = wag_s_3;i<=wag_e_3; i++){
+//  Serial.print(EEPROM.read(i));
+//  Serial.print(" ");
+//}
+//
+//Serial.println(" ");
+//for (int i = wag_s_4;i<=wag_e_4; i++){
+//  Serial.print(EEPROM.read(i));
+//  Serial.print(" ");
+//}
+//
+//Serial.println(" ");
 
-  //  patrik.init1();
 
+//for (int i = selfPour_s_2; i <= selfPour_e_2; i++) {
+//    EEPROM.write(i, selfPour[1][i-12*5]);
+//  }
 
   
 
@@ -730,6 +884,6 @@ void setup() {
 
 void loop() {
 
-  //  patrik.Run(60000);
-
+    patrik.Run(60000);
+//Serial.println("asdad ");
 }
