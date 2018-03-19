@@ -171,7 +171,7 @@ void Patrik::init1(int l5, int l4, int l3, int l2, int l1, int neck , int head, 
 
   mp3_set_serial (mySerial);
   delay(1);   //set softwareSerial for DFPlayer-mini mp3 module
-  mp3_set_volume (5);  //громкость плеера
+  mp3_set_volume (volume);  //громкость плеера
   mp3_set_EQ (5);
   delay(200);
   Say (10, 11);
@@ -182,12 +182,10 @@ void Patrik::init1(int l5, int l4, int l3, int l2, int l1, int neck , int head, 
 
 
   if (EEPROM.read(0) > 180) {
-    for (int i = 0; i <= 11; i++) {
+    for (int i = 0; i <= 205; i++) {
       EEPROM.write(i, 90);
     }
-    for (int i = 12; i<=205; i++){
-      EEPROM.write(i, 0);
-    }
+    
   }
 
   
@@ -375,18 +373,19 @@ void Patrik::Scan(long period) {
     DetachHands();
     distance = ultrasonic.distanceRead();
     sense_val = analogRead(sensor);
-    //  Serial.print(" distance: ");
-    //  Serial.println(distance);
-    //  Serial.print("sense_val ");
-    //  Serial.println(sense_val);
+    if(debug){
+      Serial.print(" distance: ");
+      Serial.println(distance);
+      Serial.print("sense_val ");
+      Serial.println(sense_val);
 
-    //  Serial.print(" millis: ");
-    //  Serial.println(millis());
-    //  Serial.print("current_time ");
-    //  Serial.println(current_time);
-    //  Serial.print("period ");
-    //  Serial.println(period);
-
+      Serial.print(" millis: ");
+      Serial.println(millis());
+      Serial.print("current_time ");
+      Serial.println(current_time);
+      Serial.print("period ");
+      Serial.println(period);
+    }
     if ((millis() - current_time) > period) {
       time_bool = true;
       AttachAll();
@@ -753,137 +752,14 @@ void Patrik::SaveNice() {
 
 
 Patrik patrik;
-//0 0 0 0 0 -35 -40 +55 0 0 0 0
-//0 0 0 0 0 -35 -40 +55 0 0 0 -50
-//0 0 0 0 0 -35 -40 +55 0 0 0 0
-
-//-30 20 0 -20 -80 0 0 -40 0 0 0 -10
-// 100 0 0 -20 -80 0 0 -40 0 20 0 -10
-//0 0 0 -20 -80 0 0 -40 0 20 0 -10
 
 
-//-30 0 0 0 -80 0 0 0 0 0 0 0
-//-30 -30 0 0 -80 30 -40 0 0 0 0 0
-//-30 0 0 0 -80 0 0 0 0 0 0 0
-//-30 -30 0 0 -80 -30 -40 0 0 0 0 0
-
-
-//0 0 0 0 -70 0 0 0 0 0 0 0
-//130 0 0 0 -70 0 0 0 0 0 0 0
-//0 0 0 0 -70 0 0 0 0 0 0 0
-
-//0 0 0 0 0 30 -30 0 0 0 0 0
-//0 0 0 0 0 0 0 0 0 0 0 0
-//0 0 0 0 0 -30 -30 0 0 0 0 0
-
-
-//int drink[3][12] = { { 30, 90, 60, 60, 120, 70-35, 80-40,125+55, 120, 120, 60, 90 },               { 30, 90,    60, 60, 120,      70-35, 80-40, 125+55, 120, 120, 60, 90-50 }, { 30, 90, 60,   60, 120, 70 -35, 80-40,125+55,120, 120, 60, 90 } } ;
-int selfPour[3][12] = { { 30-30, 90+20, 60, 60-20, 120-80, 70, 80, 125-40, 120, 120, 60, 90-10  }, { 30+100, 90,60,60 -20,120 -80, 70, 80, 125-40, 120, 120+20,60, 90-10 },       { 30, 90, 60, 60-20, 120-80, 70, 80, 125 -40, 120, 120+20, 60, 90-10 } };
-//int wag[4][12] = { { 30-30, 90, 60, 60, 120-80, 70, 80,125, 120, 120, 60, 90 }, { 30-30, 90-30, 60, 60, 120-80, 70+30, 80-40,125, 120, 120, 60, 90  }, { 30-30, 90, 60, 60, 120-80,70, 80,125, 120, 120, 60, 90 }, { 30-30, 90-30, 60, 60, 120-80, 70-30, 80-40,125, 120, 120, 60, 90  } };
-//int pour[3][12] = { { 30, 90, 60, 60, 120-70, 70, 80, 125, 120, 120, 60, 90}, { 30+130, 90, 60, 60, 120-70, 70, 80, 125, 120, 120, 60, 90 }, { 30, 90, 60, 60, 120-70, 70, 80,125, 120, 120, 60, 90 } };
-//int nice[3][12] = { { 30, 90, 60, 60, 120,70+ 30, 80-30, 125, 120, 120, 60, 90 }, {  30, 90, 60, 60, 120,70, 80, 125, 120, 120, 60, 90 }, { 30, 90, 60, 60, 120, 70-30, 80-30, 125, 120, 120, 60, 90} };
-//
-//int drink_s_1 = 12;
-//int drink_e_1 = 23;
-//
-//int drink_s_2 = 24;
-//int drink_e_2 = 35;
-//
-//int drink_s_3 = 36;
-//int drink_e_3 = 47;
-//
-//
-//int selfPour_s_1 = 48;
-//int selfPour_e_1 = 59;
-//
-int selfPour_s_2 = 60;
-int selfPour_e_2 = 71;
-//
-//int selfPour_s_3 = 72;
-//int selfPour_e_3 = 83;
-//
-//
-
-int wag_s_1 = 84;
-int wag_e_1 = 95;
-
-int wag_s_2 = 96;
-int wag_e_2 = 107;
-
-int wag_s_3 = 108;
-int wag_e_3 = 119;
-
-int wag_s_4 = 120;
-int wag_e_4 = 131;
-
-//
-//
-//int pour_s_1 = 132;
-//int pour_e_1 = 143;
-//
-//int pour_s_2 = 144;
-//int pour_e_2 = 155;
-//
-//int pour_s_3 = 156;
-//int pour_e_3 = 167;
-//
-//
-//
-//int nice_s_1 = 168;
-//int nice_e_1 = 179;
-//
-//int nice_s_2 = 180;
-//int nice_e_2 = 191;
-//
-//int nice_s_3 = 192;
-//int nice_e_3 = 203;
-
-
-
-
-
-
-void setup() {
- 
+void setup() { 
     patrik.init1();
-//Serial.begin(9600);
-//Serial.println("start");
-//for (int i = wag_s_1;i<=wag_e_1; i++){
-//  Serial.print(EEPROM.read(i));
-//  Serial.print(" ");
-//}
-//
-//Serial.println(" ");
-//for (int i = wag_s_2;i<=wag_e_2; i++){
-//  Serial.print(EEPROM.read(i));
-//  Serial.print(" ");
-//}
-//
-//Serial.println(" ");
-//for (int i = wag_s_3;i<=wag_e_3; i++){
-//  Serial.print(EEPROM.read(i));
-//  Serial.print(" ");
-//}
-//
-//Serial.println(" ");
-//for (int i = wag_s_4;i<=wag_e_4; i++){
-//  Serial.print(EEPROM.read(i));
-//  Serial.print(" ");
-//}
-//
-//Serial.println(" ");
-
-
-//for (int i = selfPour_s_2; i <= selfPour_e_2; i++) {
-//    EEPROM.write(i, selfPour[1][i-12*5]);
-//  }
-
-  
-
 }
 
 void loop() {
 
     patrik.Run(60000);
-//Serial.println("asdad ");
+
 }
