@@ -37,6 +37,8 @@ class Patrik {
     void SaveWag();
     void SavePour();
     void SaveNice();
+    void Calib();
+    void SetArms( int ( *pose )[12], size_t n , int lev, int n_p);
 
     Patrik(int rx = 44, int tx = 46 , int trig = 30, int echo = 31): mySerial(rx, tx), ultrasonic(trig, echo) {}
 
@@ -163,8 +165,7 @@ void Patrik::init1(int l5, int l4, int l3, int l2, int l1, int neck , int head, 
   pinMode(led, OUTPUT);
   pinMode(pump, OUTPUT);
   digitalWrite(pump, LOW);
-  pinMode(all, OUTPUT);
-  digitalWrite(all, LOW);
+  
   Serial.println(all);
   delay(1000);
 
@@ -330,7 +331,11 @@ Serial.println("end wag ");
     servo[i].write(servo_positions[i]);
   }
 
-  Hello();
+  delay(2000);
+  pinMode(all, OUTPUT);
+  digitalWrite(all, LOW);
+
+  
 Serial.println("end init");
 }
 
@@ -481,7 +486,7 @@ void Patrik::Move(int l5, int l4, int l3, int l2, int l1, int neck , int head, i
         new_pos[9] == old_pos[9] &&
         new_pos[10] == old_pos[10] &&
         new_pos[11] == old_pos[11]) {
-      Serial.println("exit move");
+//      Serial.println("exit move");
       break;
     }
   }
@@ -491,6 +496,8 @@ void Patrik::Move(int l5, int l4, int l3, int l2, int l1, int neck , int head, i
 
 
 void Patrik::Run(long time_b) {
+  Hello();
+  while(1){
 
   Scan(time_b);
   if (dist_bool) {
@@ -508,6 +515,7 @@ void Patrik::Run(long time_b) {
     ResetBools();
     SelfPour();
     Nice();
+  }
   }
 }
 
@@ -741,13 +749,212 @@ void Patrik::SaveNice() {
   }
 }
 
+void Patrik::Calib(){
+   if (Serial.available()>0){
+    
+    String command = Serial.readString();
+    String calib = "calibration\n";       
+    if (command == calib){
+    Serial.println("Calibration mode");
+    Serial.println("Enter command:");
+    Serial.println("1 - Drink calibration:");
+    Serial.println("2 - SelfPour calibration:");
+    Serial.println("3 - Pour calibration:");
+    Serial.println("4 - Wag calibration:");
+    Serial.println("5 - Nice calibration:");
+    while(1){
+      if (Serial.available()>0){
+//        String com  = Serial.readString();
+        char com  = Serial.read();
+        if (com = '1'){
+          Serial.println("Drink calibration");
+          Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11], 50);
+          Move(drink[0][0], drink[0][1], drink[0][2], drink[0][3], drink[0][4], drink[0][5], drink[0][6], drink[0][7], drink[0][8], drink[0][9], drink[0][10], drink[0][11],      50);
+          Serial.println("drink[0][0]-qw, drink[0][1]-e4, drink[0][2]-ty, drink[0][3]-ui, drink[0][4]-op, drink[0][5]-as");
+          Serial.println("drink[0][6]-df, drink[0][7]-gh, drink[0][8]-jk, drink[0][9]-zx, drink[0][10]-cv, drink[0][11]-bn");
+          
+
+            SetArms(drink,3,1,0);
+            Move(drink[1][0], drink[1][1], drink[1][2], drink[1][3], drink[1][4], drink[1][5], drink[1][6], drink[1][7], drink[1][8], drink[1][9], drink[1][10], drink[1][11],      50);
+            SetArms(drink,3,2,1);
+            Move(drink[2][0], drink[2][1], drink[2][2], drink[2][3], drink[2][4], drink[2][5], drink[2][6], drink[2][7], drink[2][8], drink[2][9], drink[2][10], drink[2][11],50);
+            SetArms(drink,3,3,2);
+            Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11], 50);
+            Serial.println("Drink calibration DONE");
+            break;
+            
+          
+        }
+         if (com = '2'){
+          Serial.println("SelfPour calibration");
+          Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11], 50);
+          Move(drink[0][0], drink[0][1], drink[0][2], drink[0][3], drink[0][4], drink[0][5], drink[0][6], drink[0][7], drink[0][8], drink[0][9], drink[0][10], drink[0][11],      50);
+          Serial.println("drink[0][0]-qw, drink[0][1]-e4, drink[0][2]-ty, drink[0][3]-ui, drink[0][4]-op, drink[0][5]-as");
+          Serial.println("drink[0][6]-df, drink[0][7]-gh, drink[0][8]-jk, drink[0][9]-zx, drink[0][10]-cv, drink[0][11]-bn");
+          
+
+            SetArms(selfPour,3,4,0);
+            Move(selfPour[1][0], selfPour[1][1], selfPour[1][2], selfPour[1][3], selfPour[1][4], selfPour[1][5], selfPour[1][6], selfPour[1][7], selfPour[1][8], selfPour[1][9], selfPour[1][10], selfPour[1][11],      50);
+            SetArms(selfPour,3,5,1);
+            Move(selfPour[2][0], selfPour[2][1], selfPour[2][2], selfPour[2][3], selfPour[2][4], selfPour[2][5], selfPour[2][6], selfPour[2][7], selfPour[2][8], selfPour[2][9], selfPour[2][10], selfPour[2][11],50);
+            SetArms(selfPour,3,6,2);
+            Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11], 50);
+            Serial.println("SelfPour calibration DONE");
+            break;
+
+
+
+
+        
+      }
+    }
+  }
+  }
+}
 
 
 
 
 
 
+void Patrik::SetArms( int ( *pose )[12], size_t n , int lev, int n_p){
+  while(1){
+  if (Serial.available()>0){
+              Serial.print(pose[0][0]);
+              Serial.print(" ");
+              Serial.print(pose[0][1]);
+              Serial.print(" ");
+              Serial.print(pose[0][2]);
+              Serial.print(" ");
+              Serial.print(pose[0][3]);
+              Serial.print(" ");
+              Serial.print(pose[0][4]);
+              Serial.print(" ");
+              Serial.print(pose[0][5]);
+              Serial.print(" ");
+              Serial.print(pose[0][6]);
+              Serial.print(" ");
+              Serial.print(pose[0][7]);
+              Serial.print(" ");
+              Serial.print(pose[0][8]);
+              Serial.print(" ");
+              Serial.print(pose[0][9]);
+              Serial.print(" ");
+              Serial.print(pose[0][10]);
+              Serial.print(" ");
+              Serial.print(pose[0][11]);
+              Serial.print(" ");
+              char com_dc  = Serial.read();
+              Serial.println(com_dc);
+              if (com_dc == 'q'){
+//                Serial.println('pose[0][0]--');
+                pose[n_p][0]--;
+//                Serial.println(pose[0][0]);
+              }
+              if (com_dc == 'w'){
+//                Serial.println('pose[0][0]++');
+                pose[n_p][0]++;
+//                 Serial.println(pose[0][0]);
+              }
 
+              if (com_dc == 'e'){
+                pose[n_p][1]--;
+              }
+              if (com_dc == 'r'){
+                pose[n_p][1]++;
+              }
+
+
+              if (com_dc == 't'){
+                pose[n_p][2]--;
+              }
+              if (com_dc == 'y'){
+                pose[n_p][2]++;
+              }
+
+              if (com_dc == 'u'){
+                pose[n_p][3]--;
+              }
+              if (com_dc == 'i'){
+                pose[n_p][3]++;
+              }
+
+
+              if (com_dc == 'o'){
+                pose[n_p][4]--;
+              }
+              if (com_dc == 'p'){
+                pose[n_p][4]++;
+              }
+
+              if (com_dc == 'a'){
+                pose[n_p][5]--;
+              }
+              if (com_dc == 's'){
+                pose[n_p][5]++;
+              }
+
+              if (com_dc == 'd'){
+                pose[n_p][6]--;
+              }
+              if (com_dc == 'f'){
+                pose[n_p][6]++;
+              }
+
+
+              if (com_dc == 'g'){
+                pose[n_p][7]--;
+              }
+              if (com_dc == 'h'){
+                pose[n_p][7]++;
+              }
+
+              if (com_dc == 'j'){
+                pose[n_p][8]--;
+              }
+              if (com_dc == 'k'){
+                pose[n_p][8]++;
+              }
+
+              if (com_dc == 'z'){
+                pose[n_p][9]--;
+              }
+              if (com_dc == 'x'){
+                pose[n_p][9]++;
+              }
+
+              if (com_dc == 'c'){
+                pose[n_p][10]--;
+              }
+              if (com_dc == 'v'){
+                pose[n_p][10]++;
+              }
+
+              if (com_dc == 'b'){
+                pose[n_p][11]--;
+              }
+              if (com_dc == 'n'){
+                pose[n_p][11]++;
+              }
+              if (com_dc == ','){
+                break;
+              }
+
+              
+              if(com_dc == 'm'){
+                for (int i = 0; i<=11; i++){
+                  Serial.println("Saving position");
+                EEPROM.write(i+12*lev, pose[n_p][i]);
+                break;
+                }
+              }
+
+              
+
+              Move(pose[0][0], pose[0][1], pose[0][2], pose[0][3], pose[0][4], pose[0][5], pose[0][6], pose[0][7], pose[0][8], pose[0][9], pose[0][10], pose[0][11],200);
+            }
+  }
+}
 
 
 
@@ -756,10 +963,15 @@ Patrik patrik;
 
 void setup() { 
     patrik.init1();
+//Serial.begin(9600);
+ delay(1000);
+ patrik.DetachAll();
 }
 
 void loop() {
+ 
+//patrik.Calib();
 
-    patrik.Run(60000);
+//    patrik.Run(60000);
 
 }
