@@ -369,7 +369,8 @@ void Patrik::ResetBools() {
 }
 
 void Patrik::Scan(long period) {
-  delay(2000);
+  delay(100);
+  Calib();
   long current_time = millis();
   Serial.println("start scan");
 
@@ -755,6 +756,7 @@ void Patrik::Calib(){
     String command = Serial.readString();
     String calib = "calibration\n";       
     if (command == calib){
+      AttachAll();
     Serial.println("Calibration mode");
     Serial.println("Enter command:");
     Serial.println("1 - Drink calibration:");
@@ -1042,15 +1044,13 @@ Patrik patrik;
 
 void setup() { 
     patrik.init1();
-//Serial.begin(9600);
- delay(1000);
- patrik.DetachAll();
+
 }
 
 void loop() {
  
 //patrik.Calib();
 
-//    patrik.Run(60000);
+    patrik.Run(60000);
 
 }
