@@ -40,7 +40,7 @@ class Patrik {
     void Calib();
     void SetArms( int ( *pose )[12], size_t n , int lev, int n_p);
     void ReadMemory();
-
+    // (46 через резистор, на плеере rx)
     Patrik(int rx = 44, int tx = 46 , int trig = 30, int echo = 31): mySerial(rx, tx), ultrasonic(trig, echo) {}
 
 
