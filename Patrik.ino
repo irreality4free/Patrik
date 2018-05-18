@@ -11,7 +11,7 @@ class Patrik {
   public:
 
     void init1(int l5 = 13, int l4 = 12, int l3 = 11, int l2 = 10, int l1 = 9, int neck = 8 , int head = 7, int r1 = 6, int r2 = 5, int r3 = 4, int r4 = 3, int r5 = 2,
-               int led_pin = 45, int pump_pin = 48, int all = 43, int volume = 30, int sensor = A0);
+               int led_pin = 45, int pump_pin = 48, int all = 43, int volume = 30, int sensor = A1);
 
 
     void Move(int l5, int l4, int l3, int l2, int l1, int neck , int head, int r1, int r2, int r3, int r4, int r5, int del = 20);
@@ -40,7 +40,7 @@ class Patrik {
     void Calib();
     void SetArms( int ( *pose )[12], size_t n , int lev, int n_p);
     void ReadMemory();
-    // (46 через резистор, на плеере rx)
+
     Patrik(int rx = 44, int tx = 46 , int trig = 30, int echo = 31): mySerial(rx, tx), ultrasonic(trig, echo) {}
 
 
@@ -59,13 +59,14 @@ class Patrik {
 
     Servo servo[12];
     int distance;
-    int min_sense_val = 800;
+    int min_sense_val = 900;
     int min_distance = 3;
     bool dist_bool = false;
     bool sense_bool = false;
     bool time_bool = false;
     int led;
     int pump;
+    int sen;
 
     int sense_val;
     int sensor;
@@ -249,6 +250,7 @@ void Patrik::init1(int l5, int l4, int l3, int l2, int l1, int neck , int head, 
   mySerial.begin (9600);
   led = led_pin;
   pump = pump_pin;
+  sen = sensor;
   randomSeed(analogRead(A6));
   pinMode(led, OUTPUT);
   pinMode(pump, OUTPUT);
@@ -263,7 +265,7 @@ void Patrik::init1(int l5, int l4, int l3, int l2, int l1, int neck , int head, 
   mp3_set_volume (volume);  //громкость плеера
   mp3_set_EQ (5);
   delay(200);
-  Say (10, 11);
+//  Say (10, 11);
 
 
 
@@ -352,8 +354,8 @@ void Patrik::Scan(long period) {
     Calib();
     delay(100);
     DetachHands();
-    distance = ultrasonic.distanceRead();
-    sense_val = analogRead(sensor);
+    distance = (ultrasonic.distanceRead()+ultrasonic.distanceRead()+ultrasonic.distanceRead()+ultrasonic.distanceRead())/4;
+    sense_val = analogRead(sen);
     if(debug){
       Serial.print(" distance: ");
       Serial.println(distance);
@@ -380,7 +382,7 @@ void Patrik::Scan(long period) {
       sense_bool = true;
       break;
     }
-    if (distance < min_distance) {
+    if (distance < min_distance && distance > 0 ) {
       AttachAll();
       Serial.println("dist bool");
       dist_bool = true;
@@ -478,7 +480,7 @@ void Patrik::Run(long time_b) {
   Scan(time_b);
   if (dist_bool) {
     ResetBools();
-    Pour();
+    Pour(3000);
   }
 
   if (sense_bool) {
@@ -504,7 +506,8 @@ void Patrik::Say(int from, int to) {
 void Patrik::Hello() {
 
   delay(3000);
-  Say(1, 2);
+  ///privet
+  Say(1, 4);
   Wag();
 }
 
@@ -513,7 +516,7 @@ void Patrik::Drink() {
   //3vars
   //5 lines
 
-  Say(4, 7);
+  Say(8, 11);
 
   Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
   
@@ -530,7 +533,7 @@ void Patrik::Drink() {
 void Patrik::SelfPour(int del) {
   //7 vars
   //5 lines
-  Say(9, 10);
+  Say(14, 17);
   Move(start_pos[0],        start_pos[1],      start_pos[2], start_pos[3],      start_pos[4],      start_pos[5], start_pos[6], start_pos[7],      start_pos[8], start_pos[9],      start_pos[10], start_pos[11]);
   
   Move(selfPour[0][0], selfPour[0][1], selfPour[0][2], selfPour[0][3], selfPour[0][4], selfPour[0][5], selfPour[0][6], selfPour[0][7], selfPour[0][8], selfPour[0][9], selfPour[0][10], selfPour[0][11]);
@@ -538,6 +541,7 @@ void Patrik::SelfPour(int del) {
   Pump(1);
   delay (del);
   Pump(0);
+  delay (2000);
   Move(selfPour[2][0], selfPour[2][1], selfPour[2][2], selfPour[2][3], selfPour[2][4], selfPour[2][5], selfPour[2][6], selfPour[2][7], selfPour[2][8], selfPour[2][9], selfPour[2][10], selfPour[2][11]);
 
   Move(start_pos[0],        start_pos[1],      start_pos[2], start_pos[3],      start_pos[4],      start_pos[5], start_pos[6], start_pos[7],      start_pos[8], start_pos[9],      start_pos[10], start_pos[11]);
@@ -554,14 +558,15 @@ void Patrik::Wag() {
   Move(wag[0][0], wag[0][1], wag[0][2], wag[0][3], wag[0][4], wag[0][5], wag[0][6], wag[0][7], wag[0][8], wag[0][9], wag[0][10], wag[0][11]);
   Move(wag[1][0], wag[1][1], wag[1][2], wag[1][3], wag[1][4], wag[1][5], wag[1][6], wag[1][7], wag[1][8], wag[1][9], wag[1][10], wag[1][11]);
   Move(wag[2][0], wag[2][1], wag[2][2], wag[2][3], wag[2][4], wag[2][5], wag[2][6], wag[2][7], wag[2][8], wag[2][9], wag[2][10], wag[2][11]);
-  Say(2, 3);
+  Say(4, 7);
+  delay(1500);
   Move(wag[3][0], wag[3][1], wag[3][2], wag[3][3], wag[3][4], wag[3][5], wag[3][6], wag[3][7], wag[3][8], wag[3][9], wag[3][10], wag[3][11]);
 
 
 
   Move(start_pos[0] - 30, start_pos[1],      start_pos[2], start_pos[3], start_pos[4],        start_pos[5],      start_pos[6],      start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
   Led(0);
-  Say(3, 4);
+  Say(7, 8);
 
 }
 
@@ -569,13 +574,14 @@ void Patrik::Wag() {
 void Patrik::Pour(int del) {
   //5 lines
   //2vars
-  Say(8, 9);
+  Say(17, 20);
   Move(start_pos[0],       start_pos[1], start_pos[2], start_pos[3], start_pos[4],      start_pos[5], start_pos[6], start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
   Move(pour[0][0], pour[0][1], pour[0][2], pour[0][3], pour[0][4], pour[0][5], pour[0][6], pour[0][7], pour[0][8], pour[0][9], pour[0][10], pour[0][11]);
   Move(pour[1][0], pour[1][1], pour[1][2], pour[1][3], pour[1][4], pour[1][5], pour[1][6], pour[1][7], pour[1][8], pour[1][9], pour[1][10], pour[1][11]);
   Pump(1);
   delay (del);
   Pump(0);
+  delay(1000);
   Move(pour[2][0], pour[2][1], pour[2][2], pour[2][3], pour[2][4], pour[2][5], pour[2][6], pour[2][7], pour[2][8], pour[2][9], pour[2][10], pour[2][11]);
 
   Move(start_pos[0],       start_pos[1], start_pos[2], start_pos[3], start_pos[4],      start_pos[5], start_pos[6], start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
@@ -589,7 +595,7 @@ void Patrik::Pour(int del) {
 void Patrik::Nice(int del) {
   //2 vars
   //5 lines
-  Say(7, 8);
+  Say(11, 14);
   Led(1);
   Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7], start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
   
@@ -1043,14 +1049,15 @@ Patrik patrik;
 
 void setup() { 
     patrik.init1();
-
+//patrik.DetachAll();
+//patrik.Pump(3000);
 //
 }
 
 void loop() {
  
-//patrik.Calib();
+//patrik.Scan(60000);
 
-    patrik.Run(60000);
+    patrik.Run(180000);
 
 }
