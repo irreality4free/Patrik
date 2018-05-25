@@ -185,6 +185,12 @@ void Patrik::ReadMemory(){
   for (int i = selfPour_s_3; i <= selfPour_e_3; i++) {
     selfPour[2][i-12*6]= EEPROM.read(i);
   }
+
+
+
+
+
+  
   for (int i = wag_s_1; i <= wag_e_1; i++) {
     wag[0][i-12*7]= EEPROM.read(i);
   }
@@ -818,11 +824,11 @@ void Patrik::Calib(){
           
           
 
-            SetArms(pour,3,10,0);
+            SetArms(pour,3,11,0);
             Move(pour[1][0], pour[1][1], pour[1][2], pour[1][3], pour[1][4], pour[1][5], pour[1][6], pour[1][7], pour[1][8], pour[1][9], pour[1][10], pour[1][11],      50);
-            SetArms(pour,3,11,1);
+            SetArms(pour,3,12,1);
             Move(pour[2][0], pour[2][1], pour[2][2], pour[2][3], pour[2][4], pour[2][5], pour[2][6], pour[2][7], pour[2][8], pour[2][9], pour[2][10], pour[2][11],50);
-            SetArms(pour,3,12,2);
+            SetArms(pour,3,13,2);
             Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11], 50);
             Serial.println("Pour calibration DONE");
             ReadMemory();
@@ -839,11 +845,11 @@ void Patrik::Calib(){
           
           
 
-            SetArms(nice,3,13,0);
+            SetArms(nice,3,14,0);
             Move(nice[1][0], nice[1][1], nice[1][2], nice[1][3], nice[1][4], nice[1][5], nice[1][6], nice[1][7], nice[1][8], nice[1][9], nice[1][10], nice[1][11],      50);
-            SetArms(nice,3,14,1);
+            SetArms(nice,3,15,1);
             Move(nice[2][0], nice[2][1], nice[2][2], nice[2][3], nice[2][4], nice[2][5], nice[2][6], nice[2][7], nice[2][8], nice[2][9], nice[2][10], nice[2][11],50);
-            SetArms(nice,3,15,2);
+            SetArms(nice,3,16,2);
             Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11], 50);
             Serial.println("Nice calibration DONE");
             ReadMemory();
@@ -898,7 +904,7 @@ void Patrik::SetArms( int ( *pose )[12], size_t n , int lev, int n_p){
   while(1){
   if (Serial.available()>0){
     
-    Serial.println("l_HAND-qw, l_ARM-er, l_SHOLDER-1-ty, l_SHOLDER-2-ui, l_ROLL-op, NECK-as, ");
+    Serial.println("l_HAND-qw, l_ARM-er, l_SHOLDER-1-ty, l_SHOLDER-2-ui, l_ROLL-op,  1-detach all, 2 - attach all, 3 -detach hands ");
     Serial.println("NECK-as, HEAD-df");
     Serial.println("r_ROLL-gh, rSHOLDER-2-jk, r_SHOLDER-1-zx, r_ARM-cv, r_HAND-bn, save-m, next-,");
 
@@ -1048,7 +1054,9 @@ Patrik patrik;
 
 
 void setup() { 
+//  Fill();
     patrik.init1();
+//      Fill();
 //patrik.DetachAll();
 //patrik.Pump(3000);
 //
