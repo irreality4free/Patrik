@@ -41,7 +41,7 @@ class Patrik {
     void SetArms( int ( *pose )[12], size_t n , int lev, int n_p);
     void ReadMemory();
 
-    Patrik(int rx = 44, int tx = 46 , int trig = 30, int echo = 31): mySerial(rx, tx), ultrasonic(trig, echo) {}
+    Patrik(int rx = 44, int tx = 46 , int trig = 30, int echo = 31): mySerial(rx, tx), ultrasonic(trig, echo) {}// (46 через резистор, на плеере rx)// (46 через резистор, на плеере rx)
 
 
   private:
@@ -253,6 +253,7 @@ void Patrik::init1(int l5, int l4, int l3, int l2, int l1, int neck , int head, 
                    int led_pin, int pump_pin, int all, int volume, int sensor ) {
 
   Serial.begin(9600); //открываем последовательное соединение с компом
+  Serial3.begin(9600);
   mySerial.begin (9600);
   led = led_pin;
   pump = pump_pin;
@@ -486,7 +487,7 @@ void Patrik::Run(long time_b) {
   Scan(time_b);
   if (dist_bool) {
     ResetBools();
-    Pour(3000);
+    Pour(3500);
   }
 
   if (sense_bool) {
@@ -497,7 +498,7 @@ void Patrik::Run(long time_b) {
 
   if (time_bool) {
     ResetBools();
-    SelfPour();
+    SelfPour(3000);
     Nice();
   }
   }
@@ -738,9 +739,9 @@ void Patrik::SaveNice() {
 }
 
 void Patrik::Calib(){
-   if (Serial.available()>0){
+   if (Serial3.available()>0){
     
-    String command = Serial.readString();
+    String command = Serial3.readString();
     String calib = "calibration\n";       
     if (command == calib){
       AttachAll();
@@ -753,9 +754,9 @@ void Patrik::Calib(){
     Serial.println("5 - Nice calibration:");
     Serial.println("6 - Start calibration:");
     while(1){
-      if (Serial.available()>0){
+      if (Serial3.available()>0){
 //        String com  = Serial.readString();
-        char com  = Serial.read();
+        char com  = Serial3.read();
         if (com == '1'){
           Serial.println("Drink calibration");
           Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11], 50);
@@ -902,7 +903,7 @@ void Patrik::SetArms( int ( *pose )[12], size_t n , int lev, int n_p){
  }
 
   while(1){
-  if (Serial.available()>0){
+  if (Serial3.available()>0){
     
     Serial.println("l_HAND-qw, l_ARM-er, l_SHOLDER-1-ty, l_SHOLDER-2-ui, l_ROLL-op,  1-detach all, 2 - attach all, 3 -detach hands ");
     Serial.println("NECK-as, HEAD-df");
@@ -915,7 +916,7 @@ void Patrik::SetArms( int ( *pose )[12], size_t n , int lev, int n_p){
   Serial.print(" ");
  }
 
-              char com_dc  = Serial.read();
+              char com_dc  = Serial3.read();
               Serial.println(com_dc);
               if (com_dc == 'q'){
                 p[0]--;
