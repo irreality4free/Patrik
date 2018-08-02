@@ -60,7 +60,7 @@ class Patrik {
     Servo servo[12];
     int distance;
     int min_sense_val = 900;
-    int min_distance = 3;
+    int min_distance = 5;
     bool dist_bool = false;
     bool sense_bool = false;
     bool time_bool = false;
@@ -487,18 +487,19 @@ void Patrik::Run(long time_b) {
   Scan(time_b);
   if (dist_bool) {
     ResetBools();
-    Pour(3500);
+    Pour(3000);
   }
 
   if (sense_bool) {
     ResetBools();
+    delay(3000);
     Drink();
     Nice();
   }
 
   if (time_bool) {
     ResetBools();
-    SelfPour(3000);
+    SelfPour(2400);
     Nice();
   }
   }
@@ -530,7 +531,7 @@ void Patrik::Drink() {
   Move(drink[0][0], drink[0][1], drink[0][2], drink[0][3], drink[0][4], drink[0][5], drink[0][6], drink[0][7], drink[0][8], drink[0][9], drink[0][10], drink[0][11],      50);
   Move(drink[1][0], drink[1][1], drink[1][2], drink[1][3], drink[1][4], drink[1][5], drink[1][6], drink[1][7], drink[1][8], drink[1][9], drink[1][10], drink[1][11],      90);
   delay(3000);
-  Move(drink[2][0], drink[2][1], drink[2][2], drink[2][3], drink[2][4], drink[2][5], drink[2][6], drink[2][7], drink[2][8], drink[2][9], drink[2][10], drink[2][11]);
+  Move(drink[2][0], drink[2][1], drink[2][2], drink[2][3], drink[2][4], drink[2][5], drink[2][6], drink[2][7], drink[2][8], drink[2][9], drink[2][10], drink[2][11], 50);
   
   Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11]);
 
@@ -885,6 +886,157 @@ void Patrik::Calib(){
   }
   }
 }
+
+
+
+
+
+if (Serial.available()>0){
+    
+    String command = Serial.readString();
+    String calib = "calibration\n";       
+    if (command == calib){
+      AttachAll();
+    Serial.println("Calibration mode");
+    Serial.println("Enter command:");
+    Serial.println("1 - Drink calibration:");
+    Serial.println("2 - SelfPour calibration:");
+    Serial.println("3 - Wag calibration:");
+    Serial.println("4 - Pour calibration:");
+    Serial.println("5 - Nice calibration:");
+    Serial.println("6 - Start calibration:");
+    while(1){
+      if (Serial.available()>0){
+//        String com  = Serial.readString();
+        char com  = Serial.read();
+        if (com == '1'){
+          Serial.println("Drink calibration");
+          Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11], 50);
+          Move(drink[0][0], drink[0][1], drink[0][2], drink[0][3], drink[0][4], drink[0][5], drink[0][6], drink[0][7], drink[0][8], drink[0][9], drink[0][10], drink[0][11],      50);
+         
+          
+
+            SetArms(drink,3,1,0);
+            Move(drink[1][0], drink[1][1], drink[1][2], drink[1][3], drink[1][4], drink[1][5], drink[1][6], drink[1][7], drink[1][8], drink[1][9], drink[1][10], drink[1][11],      50);
+            SetArms(drink,3,2,1);
+            Move(drink[2][0], drink[2][1], drink[2][2], drink[2][3], drink[2][4], drink[2][5], drink[2][6], drink[2][7], drink[2][8], drink[2][9], drink[2][10], drink[2][11],50);
+            SetArms(drink,3,3,2);
+            Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11], 50);
+            Serial.println("Drink calibration DONE");
+            ReadMemory();
+            break;
+            
+          
+        }
+         if (com == '2'){
+          Serial.println("SelfPour calibration");
+          Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11], 50);
+          Move(selfPour[0][0], selfPour[0][1], selfPour[0][2], selfPour[0][3], selfPour[0][4], selfPour[0][5], selfPour[0][6], selfPour[0][7], selfPour[0][8], selfPour[0][9], selfPour[0][10], selfPour[0][11],      50);
+          
+          
+
+            SetArms(selfPour,3,4,0);
+            Move(selfPour[1][0], selfPour[1][1], selfPour[1][2], selfPour[1][3], selfPour[1][4], selfPour[1][5], selfPour[1][6], selfPour[1][7], selfPour[1][8], selfPour[1][9], selfPour[1][10], selfPour[1][11],      50);
+            SetArms(selfPour,3,5,1);
+            Move(selfPour[2][0], selfPour[2][1], selfPour[2][2], selfPour[2][3], selfPour[2][4], selfPour[2][5], selfPour[2][6], selfPour[2][7], selfPour[2][8], selfPour[2][9], selfPour[2][10], selfPour[2][11],50);
+            SetArms(selfPour,3,6,2);
+            Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11], 50);
+            Serial.println("SelfPour calibration DONE");
+            ReadMemory();
+            break;
+
+        
+      }
+
+      if (com == '3'){
+          Serial.println("Wag calibration");
+          Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11], 50);
+          Move(wag[0][0], wag[0][1], wag[0][2], wag[0][3], wag[0][4], wag[0][5], wag[0][6], wag[0][7], wag[0][8], wag[0][9], wag[0][10], wag[0][11],      50);
+          
+          
+
+            SetArms(wag,4,7,0);
+            Move(wag[1][0], wag[1][1], wag[1][2], wag[1][3], wag[1][4], wag[1][5], wag[1][6], wag[1][7], wag[1][8], wag[1][9], wag[1][10], wag[1][11],      50);
+            SetArms(wag,4,8,1);
+            Move(wag[2][0], wag[2][1], wag[2][2], wag[2][3], wag[2][4], wag[2][5], wag[2][6], wag[2][7], wag[2][8], wag[2][9], wag[2][10], wag[2][11],50);
+            SetArms(wag,4,9,2);
+            Move(wag[3][0], wag[3][1], wag[3][2], wag[3][3], wag[3][4], wag[3][5], wag[3][6], wag[3][7], wag[3][8], wag[3][9], wag[3][10], wag[3][11],50);
+            SetArms(wag,4,10,2);
+            Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11], 50);
+            Serial.println("Wag calibration DONE");
+            ReadMemory();
+            break;
+
+        
+      }
+
+      if (com == '4'){
+          Serial.println("Pour calibration");
+          Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11], 50);
+          Move(pour[0][0], pour[0][1], pour[0][2], pour[0][3], pour[0][4], pour[0][5], pour[0][6], pour[0][7], pour[0][8], pour[0][9], pour[0][10], pour[0][11],      50);
+          
+          
+
+            SetArms(pour,3,11,0);
+            Move(pour[1][0], pour[1][1], pour[1][2], pour[1][3], pour[1][4], pour[1][5], pour[1][6], pour[1][7], pour[1][8], pour[1][9], pour[1][10], pour[1][11],      50);
+            SetArms(pour,3,12,1);
+            Move(pour[2][0], pour[2][1], pour[2][2], pour[2][3], pour[2][4], pour[2][5], pour[2][6], pour[2][7], pour[2][8], pour[2][9], pour[2][10], pour[2][11],50);
+            SetArms(pour,3,13,2);
+            Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11], 50);
+            Serial.println("Pour calibration DONE");
+            ReadMemory();
+            break;
+
+        
+      }
+
+
+      if (com == '5'){
+          Serial.println("Nice calibration");
+          Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11], 50);
+          Move(nice[0][0], nice[0][1], nice[0][2], nice[0][3], nice[0][4], nice[0][5], nice[0][6], nice[0][7], nice[0][8], nice[0][9], nice[0][10], nice[0][11],      50);
+          
+          
+
+            SetArms(nice,3,14,0);
+            Move(nice[1][0], nice[1][1], nice[1][2], nice[1][3], nice[1][4], nice[1][5], nice[1][6], nice[1][7], nice[1][8], nice[1][9], nice[1][10], nice[1][11],      50);
+            SetArms(nice,3,15,1);
+            Move(nice[2][0], nice[2][1], nice[2][2], nice[2][3], nice[2][4], nice[2][5], nice[2][6], nice[2][7], nice[2][8], nice[2][9], nice[2][10], nice[2][11],50);
+            SetArms(nice,3,16,2);
+            Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11], 50);
+            Serial.println("Nice calibration DONE");
+            ReadMemory();
+            break;
+
+        
+      }
+
+
+
+      if (com == '6'){
+          Serial.println("Start calibration");
+          Move(start_pos[0], start_pos[1], start_pos[2], start_pos[3], start_pos[4], start_pos[5],      start_pos[6],      start_pos[7],      start_pos[8], start_pos[9], start_pos[10], start_pos[11], 50);
+          int s_pos[1][12];
+          for(int i = 0; i>=11; i++){
+            s_pos[0][i] = start_pos[i];
+          }
+        
+          
+
+            SetArms(s_pos,1,0,0);
+            
+            Serial.println("Start calibration DONE");
+            ReadMemory();
+            break;
+
+        
+      }
+      
+    }
+    
+  }
+  }
+}
 }
 
 
@@ -903,6 +1055,8 @@ void Patrik::SetArms( int ( *pose )[12], size_t n , int lev, int n_p){
  }
 
   while(1){
+
+    /////from bluetooth
   if (Serial3.available()>0){
     
     Serial.println("l_HAND-qw, l_ARM-er, l_SHOLDER-1-ty, l_SHOLDER-2-ui, l_ROLL-op,  1-detach all, 2 - attach all, 3 -detach hands ");
@@ -920,90 +1074,283 @@ void Patrik::SetArms( int ( *pose )[12], size_t n , int lev, int n_p){
               Serial.println(com_dc);
               if (com_dc == 'q'){
                 p[0]--;
+                if(p[0]<0)p[0]=0;
               }
               if (com_dc == 'w'){
                p[0]++;
+               if(p[0]>180)p[0]=180;
 
               }
 
               if (com_dc == 'e'){
                 p[1]--;
+                if(p[1]<0)p[1]=0;
               }
               if (com_dc == 'r'){
                 p[1]++;
+                if(p[1]>180)p[1]=180;
               }
 
 
               if (com_dc == 't'){
                p[2]--;
+               if(p[2]<0)p[2]=0;
               }
               if (com_dc == 'y'){
                p[2]++;
+               if(p[2]>180)p[2]=180;
               }
 
               if (com_dc == 'u'){
                 p[3]--;
+                if(p[3]<0)p[3]=0;
               }
               if (com_dc == 'i'){
                 p[3]++;
+                if(p[3]>180)p[3]=180;
               }
 
 
               if (com_dc == 'o'){
                 p[4]--;
+                if(p[4]<0)p[4]=0;
               }
               if (com_dc == 'p'){
                 p[4]++;
+                if(p[4]>180)p[4]=180;
               }
 
               if (com_dc == 'a'){
                 p[5]--;
+                if(p[5]<0)p[5]=0;
               }
               if (com_dc == 's'){
                 p[5]++;
+                if(p[5]>180)p[5]=180;
               }
 
               if (com_dc == 'd'){
                 p[6]--;
+                if(p[6]<0)p[6]=0;
               }
               if (com_dc == 'f'){
                 p[6]++;
+                if(p[6]>180)p[6]=180;
               }
 
 
               if (com_dc == 'g'){
                 p[7]--;
+                if(p[7]<0)p[7]=0;
               }
               if (com_dc == 'h'){
                 p[7]++;
+                if(p[7]>180)p[7]=180;
               }
 
               if (com_dc == 'j'){
                 p[8]--;
+                if(p[8]<0)p[8]=0;
               }
               if (com_dc == 'k'){
                 p[8]++;
+                if(p[8]>180)p[8]=180;
               }
 
               if (com_dc == 'z'){
                 p[9]--;
+                if(p[9]<0)p[9]=0;
               }
               if (com_dc == 'x'){
                 p[9]++;
+                if(p[9]>180)p[9]=180;
               }
 
               if (com_dc == 'c'){
                 p[10]--;
+                if(p[10]<0)p[10]=0;
               }
               if (com_dc == 'v'){
                 p[10]++;
+                if(p[10]>180)p[10]=180;
               }
 
               if (com_dc == 'b'){
                 p[11]--;
+                if(p[11]<0)p[11]=0;
               }
               if (com_dc == 'n'){
                 p[11]++;
+                if(p[11]>180)p[11]=180;
+              }
+              if (com_dc == ','){
+                break;
+              }
+              if (com_dc == '1'){
+                Serial.println("detached all");
+                DetachAll();
+              }
+
+              if (com_dc == '3'){
+                DetachHands();
+                 Serial.println("detached hands");
+              }
+              if (com_dc == '2'){
+                 Serial.println("attach all");
+                AttachAll();
+              }
+
+              
+              if(com_dc == 'm'){
+                for (int i = 0; i<=11; i++){
+                  Serial.println("Saving position");
+                EEPROM.write(i+12*lev, p[i]);
+                Serial.println(p[i]);
+                }
+                Serial.println("new positions");
+                for (int i = 0; i<=11; i++){
+                  Serial.println(EEPROM.read(i+12*lev));
+                }
+                Serial.println("addres");
+                for (int i = 0; i<=11; i++){
+                  Serial.println((i+12*5));
+                }
+                
+                break;
+                }
+              }
+
+
+
+
+
+///////////from usb
+
+              if (Serial.available()>0){
+    
+    Serial.println("l_HAND-qw, l_ARM-er, l_SHOLDER-1-ty, l_SHOLDER-2-ui, l_ROLL-op,  1-detach all, 2 - attach all, 3 -detach hands ");
+    Serial.println("NECK-as, HEAD-df");
+    Serial.println("r_ROLL-gh, rSHOLDER-2-jk, r_SHOLDER-1-zx, r_ARM-cv, r_HAND-bn, save-m, next-,");
+
+               
+   for(int i = 0; i<=11; i++){
+ 
+  Serial.print(p[i]);
+  Serial.print(" ");
+ }
+
+              char com_dc  = Serial.read();
+              Serial.println(com_dc);
+              if (com_dc == 'q'){
+                p[0]--;
+                if(p[0]<0)p[0]=0;
+              }
+              if (com_dc == 'w'){
+               p[0]++;
+               if(p[0]>180)p[0]=180;
+
+              }
+
+              if (com_dc == 'e'){
+                p[1]--;
+                if(p[1]<0)p[1]=0;
+              }
+              if (com_dc == 'r'){
+                p[1]++;
+                if(p[1]>180)p[1]=180;
+              }
+
+
+              if (com_dc == 't'){
+               p[2]--;
+               if(p[2]<0)p[2]=0;
+              }
+              if (com_dc == 'y'){
+               p[2]++;
+               if(p[2]>180)p[2]=180;
+              }
+
+              if (com_dc == 'u'){
+                p[3]--;
+                if(p[3]<0)p[3]=0;
+              }
+              if (com_dc == 'i'){
+                p[3]++;
+                if(p[3]>180)p[3]=180;
+              }
+
+
+              if (com_dc == 'o'){
+                p[4]--;
+                if(p[4]<0)p[4]=0;
+              }
+              if (com_dc == 'p'){
+                p[4]++;
+                if(p[4]>180)p[4]=180;
+              }
+
+              if (com_dc == 'a'){
+                p[5]--;
+                if(p[5]<0)p[5]=0;
+              }
+              if (com_dc == 's'){
+                p[5]++;
+                if(p[5]>180)p[5]=180;
+              }
+
+              if (com_dc == 'd'){
+                p[6]--;
+                if(p[6]<0)p[6]=0;
+              }
+              if (com_dc == 'f'){
+                p[6]++;
+                if(p[6]>180)p[6]=180;
+              }
+
+
+              if (com_dc == 'g'){
+                p[7]--;
+                if(p[7]<0)p[7]=0;
+              }
+              if (com_dc == 'h'){
+                p[7]++;
+                if(p[7]>180)p[7]=180;
+              }
+
+              if (com_dc == 'j'){
+                p[8]--;
+                if(p[8]<0)p[8]=0;
+              }
+              if (com_dc == 'k'){
+                p[8]++;
+                if(p[8]>180)p[8]=180;
+              }
+
+              if (com_dc == 'z'){
+                p[9]--;
+                if(p[9]<0)p[9]=0;
+              }
+              if (com_dc == 'x'){
+                p[9]++;
+                if(p[9]>180)p[9]=180;
+              }
+
+              if (com_dc == 'c'){
+                p[10]--;
+                if(p[10]<0)p[10]=0;
+              }
+              if (com_dc == 'v'){
+                p[10]++;
+                if(p[10]>180)p[10]=180;
+              }
+
+              if (com_dc == 'b'){
+                p[11]--;
+                if(p[11]<0)p[11]=0;
+              }
+              if (com_dc == 'n'){
+                p[11]++;
+                if(p[11]>180)p[11]=180;
               }
               if (com_dc == ','){
                 break;
@@ -1066,7 +1413,8 @@ void setup() {
 void loop() {
  
 //patrik.Scan(60000);
-
+//digitalWrite(37, HIGH);
+//patrik.Pump(1);
     patrik.Run(180000);
 
 }
