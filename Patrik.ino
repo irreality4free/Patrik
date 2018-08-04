@@ -1059,19 +1059,19 @@ void Patrik::SetArms( int ( *pose )[12], size_t n , int lev, int n_p){
     /////from bluetooth
   if (Serial3.available()>0){
     
-    Serial.println("l_HAND-qw, l_ARM-er, l_SHOLDER-1-ty, l_SHOLDER-2-ui, l_ROLL-op,  1-detach all, 2 - attach all, 3 -detach hands ");
-    Serial.println("NECK-as, HEAD-df");
-    Serial.println("r_ROLL-gh, rSHOLDER-2-jk, r_SHOLDER-1-zx, r_ARM-cv, r_HAND-bn, save-m, next-,");
+//    Serial.println("l_HAND-qw, l_ARM-er, l_SHOLDER-1-ty, l_SHOLDER-2-ui, l_ROLL-op,  1-detach all, 2 - attach all, 3 -detach hands ");
+//    Serial.println("NECK-as, HEAD-df");
+//    Serial.println("r_ROLL-gh, rSHOLDER-2-jk, r_SHOLDER-1-zx, r_ARM-cv, r_HAND-bn, save-m, next-,");
 
                
    for(int i = 0; i<=11; i++){
  
-  Serial.print(p[i]);
-  Serial.print(" ");
+//  Serial.print(p[i]);
+//  Serial.print(" ");
  }
 
               char com_dc  = Serial3.read();
-              Serial.println(com_dc);
+//              Serial.println(com_dc);
               if (com_dc == 'q'){
                 p[0]--;
                 if(p[0]<0)p[0]=0;
@@ -1391,7 +1391,7 @@ void Patrik::SetArms( int ( *pose )[12], size_t n , int lev, int n_p){
 
               
 
-              Move(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9], p[10], p[11],50);
+              Move(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9], p[10], p[11],1);
             }
   }
 
